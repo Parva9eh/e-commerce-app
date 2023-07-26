@@ -3,7 +3,7 @@ import {Fragment, useContext} from 'react';
 import './navigation.styles.scss';
 import {UserContext} from '../../context/user.context';
 import {signOutUser} from '../../utils/firebase/firebase.utils';
-import { ReactComponent as CrwnLogo } from '../../assets/crown.svg'
+import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
 
 const Navigation = ()=>{
   const {currentUser} = useContext(UserContext);
