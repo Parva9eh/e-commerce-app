@@ -4,13 +4,13 @@ import { createContext, useState, useEffect} from "react";
 
 import { getCollectionAndDocuments } from "../utils/firebase/firebase.utils";
 
-export const ProductsContext = createContext({
-    products: [],
+export const CategoriesContext = createContext({
+    categoriesMap: {},
 });
 
-export const ProductsProvider = ({children}) => {
-    const [products] = useState([]);
-    const value = {products};
+export const CategoriesProvider = ({children}) => {
+    const [categoriesMap, setCategoriesMap] = useState({});
+    const value = {categoriesMap};
 
     /* Write the collection to the firebase database */
     // useEffect(()=>{
@@ -20,13 +20,14 @@ export const ProductsProvider = ({children}) => {
     /* Get the collection from the firebase database */
     useEffect(()=>{
         const getCategoriesMap = async () =>{
-            const categoriesMap = await getCollectionAndDocuments();
-            console.log(categoriesMap);
+            const categoryMap = await getCollectionAndDocuments();
+            console.log(categoryMap);
+            setCategoriesMap(categoryMap);
         }
         getCategoriesMap();
     },[])
 
     return(
-        <ProductsContext.Provider value={value}>{children}</ProductsContext.Provider>
+        <CategoriesContext.Provider value={value}>{children}</CategoriesContext.Provider>
     )
 };
