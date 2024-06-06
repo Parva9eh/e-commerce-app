@@ -5,7 +5,7 @@ export const setCurrentUser = (user) =>
     createAction(USER_ACTION_TYPES.SET_CURRENT_USER, user);
 
 export const checkUserSession = () =>
-createAction(USER_ACTION_TYPES.CHECK_USER_SESSION);
+    createAction(USER_ACTION_TYPES.CHECK_USER_SESSION);
 
 export const googleSignInStart = () =>
     createAction(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START);
@@ -17,5 +17,5 @@ export const signInSuccess = (user) =>
     createAction(USER_ACTION_TYPES.SIGN_IN_SUCCESS, user);
 
 export const signInFailed = (error) =>
-createAction(USER_ACTION_TYPES.SIGN_IN_FAILED, error);
+    createAction(USER_ACTION_TYPES.SIGN_IN_FAILED, error);
   
