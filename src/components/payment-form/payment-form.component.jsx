@@ -15,10 +15,25 @@ const PaymentForm = () =>{
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({amount: 1000})
+            body: JSON.stringify({amount: 10})
         }).then((res)=>res.json());
-        console.log("res",response);
+        
+        const { paymentIntent: { client_secret} } = response;
 
+        const paymentResult = await stripe.confirmCardPayment(client_secret,{
+            payment_method: {
+                card: elements.getElement(CardElement),
+                billing_details:{
+                name: 'P'
+                }
+            }
+        });
+        if(paymentResult.error)
+            alert(paymentResult.error.message);
+        else{
+            if(paymentResult.paymentIntent.status === 'succeeded')
+                alert('Payment Successful');
+        }
     }
     return(
         <PaymentFormContainer>
