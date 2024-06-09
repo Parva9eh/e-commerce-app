@@ -10,11 +10,20 @@ const PaymentForm = () =>{
         e.preventDefault();
         if(!stripe || !elements)
             return;
+        const response = await fetch("/.netlify/functions/create-payment-intent", {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({amount: 1000})
+        }).then((res)=>res.json());
+        console.log("res",response);
+
     }
     return(
         <PaymentFormContainer>
             <h2>Credit Card Payment:</h2>
-            <FormContainer>
+            <FormContainer onSubmit={paymentHandler}>
                 <CardElement />
                 <Button buttonType={BUTTON_TYPE_CLASSES.inverted}> Pay now</Button>
             </FormContainer>
