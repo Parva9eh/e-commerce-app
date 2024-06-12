@@ -20,7 +20,7 @@ export function withMatcher(actionCreator: Function){
     })
 }
 
-export type ActionWithPaylod<T, P> = {
+export type ActionWithPayload<T, P> = {
     type: T;
     payload: P;
 }
@@ -29,7 +29,7 @@ export type Action<T> = {
     type: T;
 }
 
-export function createAction<T extends string, P>(type: T,payload: P): ActionWithPaylod<T, P>;
+export function createAction<T extends string, P>(type: T,payload: P): ActionWithPayload<T, P>;
 
 export function createAction<T extends string, P> (type: T,payload: void): Action<T>;
 
