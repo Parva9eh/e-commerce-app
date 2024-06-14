@@ -6,8 +6,12 @@ import {CategoryContainer, Title} from './category.styles';
 import { selectCategoriesMap, selectIsCategoriesLoading} from "../../store/categories/category.selector";
 import Spinner from "../../components/spinner/spinner.components";
 
+type CategoryRouteParams = {
+    category: string;
+}
+
 const Category = () =>{
-    const {category} = useParams();
+    const {category} = useParams<keyof CategoryRouteParams>() as CategoryRouteParams;
     const isLoading = useSelector(selectIsCategoriesLoading);
     const categoriesMap = useSelector(selectCategoriesMap);
     const [products, setProducts] = useState(categoriesMap[category]);
