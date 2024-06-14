@@ -10,11 +10,11 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../store/user/user.selector';
 import { selectIsCartOpen } from '../../store/cart/cart.selector';
 
-const Navigation = ()=>{
+const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
   const dispatch = useDispatch();
-  const signOutUser = ()=> dispatch(signOutStart());
+  const signOutUser = () => dispatch(signOutStart());
   return(
     <Fragment>
       <NavigationContainer>
@@ -26,7 +26,7 @@ const Navigation = ()=>{
             Shop
           </NavLink>
           {
-            currentUser ? (<NavLink as='span' onClick={signOutUser}>SignOut</NavLink>):
+            currentUser ? (<NavLink to='void' as='span' onClick={signOutUser}>SignOut</NavLink>):
             ( <NavLink to='/auth'>
             SignIn
           </NavLink>)
