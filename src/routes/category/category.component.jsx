@@ -3,10 +3,11 @@ import {useParams} from 'react-router-dom';
 import { CategoriesContext } from "../../context/categories.context";
 import ProductCard from "../../components/product-card/product-card.component";
 import {CategoryContainer, Title} from './category.styles';
+import Spinner from "../../components/spinner/spinner.components";
 
 const Category = () =>{
     const {category} = useParams();
-    const {categoriesMap} = useContext(CategoriesContext);
+    const {categoriesMap, loading} = useContext(CategoriesContext);
     const [products, setProducts] = useState(categoriesMap[category]);
 
     useEffect(()=>{
@@ -15,11 +16,18 @@ const Category = () =>{
     
     return(
         <Fragment>
-            <Title>{category.toUpperCase()}</Title>
-            <CategoryContainer>
-                {products &&
-                    products.map((product)=><ProductCard key={product.id} product={product} />)}
-            </CategoryContainer>
+            {
+                loading ? <Spinner /> : (
+                    <Fragment>
+                        <Title>{category.toUpperCase()}</Title>
+                        <CategoryContainer>
+                            {products &&
+                                products.map((product)=><ProductCard key={product.id} product={product} />)}
+                        </CategoryContainer>
+                    </Fragment>
+                )
+            }
+            
         </Fragment>
     )
 }
