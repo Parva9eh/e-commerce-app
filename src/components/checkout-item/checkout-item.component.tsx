@@ -22,7 +22,7 @@ const CheckoutItem: FC<CheckoutItemProps> = memo(({cartItem}) =>{
     return(
         <CheckoutItemContainer>
             <ImageContainer>
-                <img src={imageUrl} alt={`${name}`} />
+                <img src={`${imageUrl}`} alt={`${name}`} />
             </ImageContainer>
             <BaseSpan>{name}</BaseSpan>           
             <Quantity>

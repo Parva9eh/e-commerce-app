@@ -3,7 +3,7 @@ import styled, {css} from 'styled-components';
 const subColor = 'grey';
 const mainColor = 'black';
 type FormInputLabelProps = {
-  shrink?: boolean;
+  $shrink?: boolean;
 }
 const shrinkLabelStyles = css`
   top: -14px;
@@ -20,7 +20,7 @@ export const FormInputLabel = styled.label<FormInputLabelProps>`
   left: 5px;
   top: 10px;
   transition: 300ms ease all;
-  ${({shrink})=> shrink && shrinkLabelStyles}
+  ${({$shrink})=> $shrink && shrinkLabelStyles}
 `;
 
 export const Input = styled.input`
