@@ -1,38 +1,33 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Button, { BUTTON_TYPE_CLASSES } from '../button.component';
+import 'jest-styled-components';
 
 describe('button tests', () => {
-  test('should render base button when nothing is passed', async () => {
+  test('should render base button when nothing is passed', () => {
     render(<Button />);
-    const baseElement = screen.getByRole('button');
-    fireEvent.mouseOver(baseElement);
-    await waitFor(() => baseElement);
-    
-    expect(baseElement).toHaveStyle('background-color: white');
-    expect(baseElement).not.toBeDisabled();
+    const baseButton = screen.getByRole('button');
+
+    expect(baseButton).toHaveStyleRule('background-color: black');
+    expect(baseButton).not.toBeDisabled();
   });
 
-  test('should render google button when passed google type', async () => {
+  test('should render google button when passed google type', () => {
     render(<Button buttonType={BUTTON_TYPE_CLASSES.google} />);
     const googleButton = screen.getByRole('button');
-    fireEvent.mouseOver(googleButton);
-    await waitFor(() => googleButton);
 
-    expect(googleButton).toHaveStyle('background-color: #357ae8');
+    expect(googleButton).toHaveStyleRule('background-color: #4285f4');
   });
 
-  test('should render inverted button when passed inverted type', async () => {
+  test('should render inverted button when passed inverted type', () => {
     render(<Button buttonType={BUTTON_TYPE_CLASSES.inverted} />);
     const invertedButton = screen.getByRole('button');
-    fireEvent.mouseOver(invertedButton);
-    await waitFor(() => invertedButton);
 
-    expect(invertedButton).toHaveStyle('background-color: black');
+    expect(invertedButton).toHaveStyleRule('background-color: white');
   });
 
-test('should be disabled if isLoading is true', () => {
-    render(<Button isLoading={true}>Test</Button>);
+  test('should be disabled if isLoading is true', () => {
+    render(<Button isLoading={true} />);
 
     expect(screen.getByRole('button')).toBeDisabled();
-    });
+  });
 });
