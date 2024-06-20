@@ -34,5 +34,35 @@ describe('Navigation tests', () => {
 
         const signOutLinkElement = screen.getByText(/sign out/i);
         expect(signOutLinkElement).toBeInTheDocument();
-    })
-})
+    });
+
+    test('It should not render the cart dropdown, if isCartOpen is false', () => {
+        renderWithProviders(<Navigation />, {
+            preLoadedState: {
+                cart: {
+                    isCartOpen: false,
+                    cartItems: []
+                }
+            }
+        });
+
+        const dropDownTextElement = screen.queryByText(/your cart is empty/i);
+        expect(dropDownTextElement).toBeNull();
+
+    });
+
+    test('It should render the cart dropdown, if isCartOpen is true', () => {
+        renderWithProviders(<Navigation />, {
+            preLoadedState: {
+                cart: {
+                    isCartOpen: true,
+                    cartItems: []
+                }
+            }
+        });
+
+        const dropDownTextElement = screen.getByText(/your cart is empty/i);
+        expect(dropDownTextElement).toBeInTheDocument();
+
+    });
+});
