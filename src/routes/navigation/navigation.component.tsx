@@ -23,12 +23,12 @@ const Navigation = () => {
         </LogoContainer>
         <NavLinks>
           <NavLink to='/shop'>
-            Shop
+            SHOP
           </NavLink>
           {
-            currentUser ? (<NavLink to='void' as='span' onClick={signOutUser}>SignOut</NavLink>):
+            currentUser ? (<NavLink to='void' as='span' onClick={signOutUser}>SIGN OUT</NavLink>):
             ( <NavLink to='/auth'>
-            SignIn
+            SIGN IN
           </NavLink>)
           }
           <CartIcon />
