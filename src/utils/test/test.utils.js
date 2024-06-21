@@ -8,6 +8,7 @@ export function renderWithProviders(
     ui,
     {
         preLoadedState = {},
+        // Automatically create a store instance if no store was passed in
         store = createStore(rootReducer, preLoadedState),
         ...renderOptions
 
@@ -20,6 +21,6 @@ export function renderWithProviders(
             </Provider>
         )
     }
-
+    // Return an object with the store and all of RTL's query functions
     return {store, ...render(ui, {wrapper: Wrapper, ...renderOptions})}
 }
