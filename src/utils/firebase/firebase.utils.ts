@@ -2,7 +2,7 @@ import {initializeApp} from 'firebase/app';
 import { Category } from '../../store/categories/category.types';
 import {
     getAuth, 
-    //signInWithRedirect, 
+    signInWithRedirect, 
     signInWithPopup, 
     GoogleAuthProvider,
     createUserWithEmailAndPassword,
@@ -43,7 +43,11 @@ googleProvider.setCustomParameters({
 
 export const auth = getAuth();
 
-export const signInWithGooglePopup = () => signInWithPopup(auth,googleProvider);
+export const signInWithGooglePopup = () => 
+  signInWithPopup(auth,googleProvider);
+
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 
 export const db = getFirestore();
 
