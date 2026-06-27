@@ -4,7 +4,7 @@ import {useDispatch} from 'react-redux';
 
 import {checkUserSession} from './store/user/user.action';
 import Spinner from "./components/spinner/spinner.components";
-import { GlobalStyle } from "./global.styles";
+import { GlobalStyle } from "./global.styles.jsx";
 
 const Navigation = lazy(() => import('./routes/navigation/navigation.component'));
 const Shop = lazy(() => import('./routes/shop/shop.component'));

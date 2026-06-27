@@ -8,7 +8,6 @@ import { persistor } from './store/store';
 import { Elements } from '@stripe/react-stripe-js';
 import { stripePromise } from './utils/stripe/stripe.utils';
 import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -24,5 +23,3 @@ root.render(
     </Provider>
   </React.StrictMode>,
 );
-
-serviceWorkerRegistration.register();
