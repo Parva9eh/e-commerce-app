@@ -7,23 +7,14 @@ import {
   userSaga,
   onSignOutStart,
   onSignUpStart,
-  onSignUpSuccess,
   onEmailSignInStart,
   onCheckUserSession,
-  onSignInStart,
   onGoogleSignInStart,
-  onSignInSuccess,
-  onSignInFailure,
-  onSignOutFailure,
-  onSignOutSuccess,
-  onSignUpFailure,
   signOut,
   signUp,
-  signIn,
   signInWithEmail,
   signInWithGoogle,
   isUserAuthenticated,
-  signInAfterSignUp,
   getSnapshotFromUserAuth,
 } from '../user.saga';
 
@@ -39,7 +30,6 @@ import {
 import {
     signOutFailed,
     signOutSuccess,
-    signUpSuccess,
     signUpFailed,
     signInFailed,
     signInSuccess,
@@ -54,7 +44,6 @@ describe('user sagas', () => {
             call(onGoogleSignInStart),
             call(onEmailSignInStart),
             call(onSignUpStart),
-            call(onSignUpSuccess),
             call(onSignOutStart),
         ])
         .next()
@@ -92,14 +81,6 @@ describe('user sagas', () => {
           .next()
           .isDone();
       });
-    
-    test('onSignUpSuccess saga should takeLatest SIGN_UP_SUCCESS and call signInAfterSignUp', () => {
-        testSaga(onSignUpSuccess)
-        .next()
-        .takeLatest(USER_ACTION_TYPES.SIGN_UP_SUCCESS, signInAfterSignUp)
-        .next()
-        .isDone();
-    });
 
     test('onSignOutStart saga should takeLatest SIGN_OUT_START and call signOut', () => {
         testSaga(onSignOutStart)
@@ -107,23 +88,6 @@ describe('user sagas', () => {
         .takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut)
         .next()
         .isDone();
-    });
-
-    test('signInAfterSignUp saga should call getSnapshotFromUserAuth and signIn', () => {
-        const mockUser = { id: 1, name: 'test' };
-        const mockAdditionalDetails = { displayName: 'test' };
-        const mockPayload = {
-            user: mockUser,
-            additionalDetails: mockAdditionalDetails,
-        };
-
-        testSaga(signInAfterSignUp, {
-            payload: mockPayload,
-        })
-            .next()
-            .call(getSnapshotFromUserAuth, mockUser, mockAdditionalDetails)
-            .next()
-            .isDone();
     });
 
     test('signOut saga success path should call signOutUser and put signOutSuccess if succesful', () => {
@@ -142,7 +106,7 @@ describe('user sagas', () => {
             .run();
     });
 
-    test('signUp saga success path should call signInAfterSignUp and put signUpSuccess if succesful', () => {
+    test('signUp saga success path should call createAuthUserWithEmailAndPassword and getSnapshotFromUserAuth', () => {
         const mockEmail = 'test@test';
         const mockPassword = 'test1234';
         const mockDisplayName = 'test';
@@ -161,10 +125,11 @@ describe('user sagas', () => {
               call(createAuthUserWithEmailAndPassword, mockEmail, mockPassword),
               mockUserCredential,
             ],
+            [
+              call(getSnapshotFromUserAuth, mockUser, { displayName: mockDisplayName }),
+            ],
           ])
-          .put(
-            signUpSuccess(mockUserCredential.user, { displayName: mockDisplayName })
-          )
+          .call(getSnapshotFromUserAuth, mockUser, { displayName: mockDisplayName })
           .run();
     });
 
@@ -302,4 +267,4 @@ describe('user sagas', () => {
           .run();
     });
 
-});  
+});
