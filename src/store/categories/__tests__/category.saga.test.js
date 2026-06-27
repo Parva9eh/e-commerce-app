@@ -1,4 +1,4 @@
-import { call } from 'typed-redux-saga/macro';
+import { call } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import { fetchCategoriesAsync, onFetchCategories, categoriesSaga } from '../category.saga';
 import { CATEGORIES_ACTION_TYPES } from '../category.types';

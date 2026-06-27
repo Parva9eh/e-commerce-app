@@ -1,13 +1,17 @@
+import { vi } from 'vitest';
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../../utils/test/test.utils";
 import Category from "../category.component";
 
-jest.mock('react-router-dom', () => ({
-    ...jest.requireActual('react-router-dom'),
-    useParams: () => ({
-        category: 'mens'
-    })
-}));
+vi.mock('react-router-dom', async () => {
+    const actual = await vi.importActual('react-router-dom');
+    return {
+        ...actual,
+        useParams: () => ({
+            category: 'mens'
+        })
+    };
+});
 
 describe('Category tests', () => {
 

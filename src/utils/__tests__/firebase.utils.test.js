@@ -1,4 +1,5 @@
-import firestoreAuth from 'firebase/auth';
+import { vi } from 'vitest';
+import * as firestoreAuth from 'firebase/auth';
 
 import {
   signInWithGooglePopup,
@@ -8,20 +9,20 @@ import {
   signOutUser,
 } from '../firebase/firebase.utils';
 
-jest.mock('firebase/auth', () => {
+vi.mock('firebase/auth', () => {
   return {
-    getAuth: jest.fn(),
-    GoogleAuthProvider: jest.fn().mockImplementation(() => {
+    getAuth: vi.fn(),
+    GoogleAuthProvider: vi.fn().mockImplementation(() => {
       return {
-        setCustomParameters: jest.fn(),
+        setCustomParameters: vi.fn(),
       };
     }),
-    signInWithPopup: jest.fn(),
-    signInWithRedirect: jest.fn(),
-    signInWithEmailAndPassword: jest.fn(),
-    createUserWithEmailAndPassword: jest.fn(),
-    onAuthStateChanged: jest.fn(),
-    signOut: jest.fn(),
+    signInWithPopup: vi.fn(),
+    signInWithRedirect: vi.fn(),
+    signInWithEmailAndPassword: vi.fn(),
+    createUserWithEmailAndPassword: vi.fn(),
+    onAuthStateChanged: vi.fn(),
+    signOut: vi.fn(),
   };
 });
 

@@ -1,13 +1,17 @@
+import { vi } from 'vitest';
 import { screen, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "../../../utils/test/test.utils";
 import CartDropdown from "../cart-dropdown.component";
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 describe('Cart Dropdown tests', () => {
 

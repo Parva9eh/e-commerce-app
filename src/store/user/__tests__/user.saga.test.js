@@ -1,4 +1,4 @@
-import { call } from 'typed-redux-saga/macro';
+import { call } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import { throwError } from 'redux-saga-test-plan/providers';
 import { USER_ACTION_TYPES } from '../user.types';

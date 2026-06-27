@@ -1,14 +1,18 @@
+import { vi } from 'vitest';
 import { screen, fireEvent } from "@testing-library/react";
 import { renderWithProviders } from "../../../utils/test/test.utils";
 import Navigation from "../navigation.component";
 import { signOutStart } from "../../../store/user/user.action";
 
-const mockDispatch = jest.fn();
+const mockDispatch = vi.fn();
  
-jest.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
-  useDispatch: () => mockDispatch,
-}));
+vi.mock('react-redux', async () => {
+  const actual = await vi.importActual('react-redux');
+  return {
+    ...actual,
+    useDispatch: () => mockDispatch,
+  };
+});
 
 describe('Navigation tests', () => {
 
