@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, FormEvent } from "react";
 import { useSelector } from "react-redux";
 import { selectCartTotal } from "../../store/cart/cart.selector";
@@ -21,7 +23,7 @@ const PaymentForm = () =>{
         setIsProcessingPayment(true);
 
         try {
-            const response = await fetch("/.netlify/functions/create-payment-intent", {
+            const response = await fetch("/api/create-payment-intent", {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',

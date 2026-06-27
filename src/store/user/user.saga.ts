@@ -1,4 +1,5 @@
 import {takeLatest, all, call, put} from 'redux-saga/effects';
+import { SagaIterator } from 'redux-saga';
 import { USER_ACTION_TYPES } from './user.types';
 import { User } from '@firebase/auth';
 
@@ -21,7 +22,7 @@ import {
     AdditionalInformation,
 } from '../../utils/firebase/firebase.utils';
 
-export function* getSnapshotFromUserAuth(userAuth: User, additionalDetails?: AdditionalInformation){
+export function* getSnapshotFromUserAuth(userAuth: User, additionalDetails?: AdditionalInformation): SagaIterator {
     try{
         const userSnapshot = yield call(
             createUserDocumentFromAuth, 
@@ -34,7 +35,7 @@ export function* getSnapshotFromUserAuth(userAuth: User, additionalDetails?: Add
     }
 }
 
-export function* signInWithGoogle(){
+export function* signInWithGoogle(): SagaIterator {
     try{
         const {user} = yield call(signInWithGooglePopup);
         yield call(getSnapshotFromUserAuth, user);
@@ -43,7 +44,7 @@ export function* signInWithGoogle(){
     }
 }
 
-export function* signInWithEmail({payload: {email, password}}: EmailSignInStart){
+export function* signInWithEmail({payload: {email, password}}: EmailSignInStart): SagaIterator {
     try{
         const userCredential = yield call(signInAuthUserWithEmailAndPassword, email, password);
         if(userCredential){
@@ -55,7 +56,7 @@ export function* signInWithEmail({payload: {email, password}}: EmailSignInStart)
     }
 }
 
-export function* signUp({payload: {email, password, displayName}}: SignUpStart){
+export function* signUp({payload: {email, password, displayName}}: SignUpStart): SagaIterator {
     try{
         const userCredential = yield call(createAuthUserWithEmailAndPassword, email, password );
         if(userCredential){
@@ -67,7 +68,7 @@ export function* signUp({payload: {email, password, displayName}}: SignUpStart){
     }
 }
 
-export function* signOut(){
+export function* signOut(): SagaIterator {
     try{
         yield call(signOutUser);
         yield put(signOutSuccess())
@@ -76,7 +77,7 @@ export function* signOut(){
     }
 }
 
-export function* isUserAuthenticated(){
+export function* isUserAuthenticated(): SagaIterator {
     try{
         const userAuth = yield call(getCurrentUser);
         if(!userAuth) return;
@@ -86,27 +87,27 @@ export function* isUserAuthenticated(){
     }
 }
 
-export function* onGoogleSignInStart(){
+export function* onGoogleSignInStart(): SagaIterator {
     yield takeLatest(USER_ACTION_TYPES.GOOGLE_SIGN_IN_START,signInWithGoogle);
 }
 
-export function* onEmailSignInStart(){
+export function* onEmailSignInStart(): SagaIterator {
     yield takeLatest(USER_ACTION_TYPES.EMAIL_SIGN_IN_START,signInWithEmail);
 }
 
-export function* onCheckUserSession(){
+export function* onCheckUserSession(): SagaIterator {
     yield takeLatest(USER_ACTION_TYPES.CHECK_USER_SESSION,isUserAuthenticated);
 }
 
-export function* onSignUpStart(){
+export function* onSignUpStart(): SagaIterator {
     yield takeLatest(USER_ACTION_TYPES.SIGN_UP_START, signUp);
 }
 
-export function* onSignOutStart(){
+export function* onSignOutStart(): SagaIterator {
     yield takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut);
 }
 
-export function* userSaga(){
+export function* userSaga(): SagaIterator {
     yield all([
         call(onCheckUserSession), 
         call(onGoogleSignInStart), 

@@ -25,13 +25,15 @@ const persistConfig: ExtendedPersistConfig = {
 };
 
 const sagaMiddleWare = createSagaMiddleWare();
-const middleWares = [import.meta.env.DEV && logger, sagaMiddleWare].filter(
+const isDev = process.env.NODE_ENV !== 'production';
+
+const middleWares = [isDev && logger, sagaMiddleWare].filter(
   (middleware): middleware is Middleware => Boolean(middleware)
   );
 
 const composeEnhancer =
-  (import.meta.env.DEV &&
-    window &&
+  (isDev &&
+    typeof window !== 'undefined' &&
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
   compose;
 
