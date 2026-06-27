@@ -5,6 +5,7 @@
   "dependencies": {
     "@stripe/react-stripe-js": "^5.4.1",
     "@stripe/stripe-js": "^8.5.3",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -27,7 +28,6 @@
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.4.2",
     "redux-saga-test-plan": "^4.0.6",
-    "redux-thunk": "^3.1.0",
     "reselect": "^5.1.1",
     "sass": "^1.94.2",
     "stripe": "^20.0.0",
@@ -59,6 +59,16 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^react$": "<rootDir>/node_modules/react",
+      "^react-dom$": "<rootDir>/node_modules/react-dom",
+      "^react/jsx-runtime$": "<rootDir>/node_modules/react/jsx-runtime.js",
+      "\\.svg$": "<rootDir>/src/__mocks__/svgMock.js",
+      "^react-router-dom$": "<rootDir>/node_modules/react-router-dom/dist/index.js",
+      "^react-router/dom$": "<rootDir>/node_modules/react-router/dist/development/dom-export.js"
+    }
   },
   "browserslist": {
     "production": [
