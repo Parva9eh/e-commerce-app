@@ -84,30 +84,29 @@ export type UserData = {
   email: string;
 }
 export const createUserDocumentFromAuth = async (
-  userAuth: User, 
-  additinalInformation={} as AdditionalInformation
-  ): Promise<void | QueryDocumentSnapshot<UserData>> => {
-    if (!userAuth) return;
-    const userDocRef = doc(db, 'users', userAuth.uid);
-    
-    const userSnapshot = await getDoc(userDocRef);
-    
-    if (!userSnapshot.exists()) {
-      const { displayName, email } = userAuth;
-      const createdAt = new Date();
-      try {
-        await setDoc(userDocRef, {
-          displayName,
-          email,
-          createdAt,
-          ...additinalInformation
-        });
-      } catch (error) {
-        console.log('error creating the user', error);
-      }
-    }
+  userAuth: User,
+  additionalInformation = {} as AdditionalInformation
+): Promise<QueryDocumentSnapshot<UserData>> => {
+  if (!userAuth) {
+    throw new Error('A valid user auth object is required');
+  }
 
-    return userSnapshot as QueryDocumentSnapshot<UserData>;
+  const userDocRef = doc(db, 'users', userAuth.uid);
+  const userSnapshot = await getDoc(userDocRef);
+
+  if (!userSnapshot.exists()) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+    await setDoc(userDocRef, {
+      displayName,
+      email,
+      createdAt,
+      ...additionalInformation,
+    });
+  }
+
+  const freshUserSnapshot = await getDoc(userDocRef);
+  return freshUserSnapshot as QueryDocumentSnapshot<UserData>;
 };
 
 
