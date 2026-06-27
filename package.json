@@ -22,10 +22,12 @@
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.4.2",
     "reselect": "^5.1.1",
-    "stripe": "^20.0.0",
+    "stripe": "^20.4.1",
     "styled-components": "^6.1.19"
   },
   "devDependencies": {
+    "@redux-saga/is": "^1.2.1",
+    "@redux-saga/symbols": "^1.2.1",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -41,11 +43,17 @@
     "jsdom": "^26.1.0",
     "redux-saga-test-plan": "^4.0.6",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.6"
   },
   "resolutions": {
     "nth-check": "^2.0.1",
-    "postcss": "^8.4.31"
+    "postcss": "^8.5.15",
+    "protobufjs": "^7.6.3",
+    "@grpc/grpc-js": "^1.14.4",
+    "@protobufjs/utf8": "^1.1.1",
+    "js-yaml": "^4.2.0",
+    "qs": "^6.15.3",
+    "picomatch": "^4.0.4"
   },
   "engines": {
     "node": ">=22"
