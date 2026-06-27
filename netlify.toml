@@ -1,0 +1,3 @@
+# Deploys run on Vercel. Skip Netlify builds so pushes to main do not fail.
+[build]
+  ignore = "exit 0"
