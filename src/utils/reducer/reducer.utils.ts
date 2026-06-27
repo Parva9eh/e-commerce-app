@@ -1,4 +1,4 @@
-import { AnyAction } from "redux-saga";
+import { AnyAction } from "redux";
 
 type Machable<AC extends ()=> AnyAction> = AC & {
     type: ReturnType<AC>['type'];
