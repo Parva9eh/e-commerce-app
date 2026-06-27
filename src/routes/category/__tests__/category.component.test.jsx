@@ -1,22 +1,11 @@
-import { vi } from 'vitest';
 import { screen } from "@testing-library/react";
 import { renderWithProviders } from "../../../utils/test/test.utils";
 import Category from "../category.component";
 
-vi.mock('react-router-dom', async () => {
-    const actual = await vi.importActual('react-router-dom');
-    return {
-        ...actual,
-        useParams: () => ({
-            category: 'mens'
-        })
-    };
-});
-
 describe('Category tests', () => {
 
     test('It should render a Spinner if isLoading is true', () => {
-        renderWithProviders(<Category />, {
+        renderWithProviders(<Category category="mens" />, {
             preLoadedState: {
                 categories: {
                     isLoading: true,
@@ -31,7 +20,7 @@ describe('Category tests', () => {
     });
 
     test('It should render products if isLoading is false and there are items present', () => {
-        renderWithProviders(<Category />, {
+        renderWithProviders(<Category category="mens" />, {
             preLoadedState: {
                 categories: {
                     isLoading: false,
