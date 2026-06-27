@@ -1,5 +1,15 @@
-import { AnyAction } from 'redux-saga';
-import { signInFailed, signOutFailed, signUpFailed, signInSuccess, signOutSuccess } from './user.action';
+import { AnyAction } from 'redux';
+import {
+    signInFailed,
+    signOutFailed,
+    signUpFailed,
+    signInSuccess,
+    signOutSuccess,
+    googleSignInStart,
+    emailSignInStart,
+    signUpStart,
+    signOutStart,
+} from './user.action';
 import { UserData } from '../../utils/firebase/firebase.utils';
 
 export type UserState = {
@@ -18,13 +28,21 @@ export const userReducer = (
   state = INITIAL_STATE, 
   action: AnyAction
 ) => {
-  if(signInSuccess.match(action))
-    return { ...state, currentUser: action.payload };
-  if(signOutSuccess.match(action))
-    return { ...state, currentUser: null };
-  if(signUpFailed.match(action) || signInFailed.match(action) || signOutFailed.match(action))
-    return { ...state, error: action.payload };
+  if (googleSignInStart.match(action) || emailSignInStart.match(action) || signUpStart.match(action) || signOutStart.match(action)) {
+    return { ...state, isLoading: true, error: null };
+  }
+
+  if (signInSuccess.match(action)) {
+    return { ...state, currentUser: action.payload, isLoading: false, error: null };
+  }
+
+  if (signOutSuccess.match(action)) {
+    return { ...state, currentUser: null, isLoading: false, error: null };
+  }
+
+  if (signUpFailed.match(action) || signInFailed.match(action) || signOutFailed.match(action)) {
+    return { ...state, isLoading: false, error: action.payload };
+  }
   
   return state;
-  
 };

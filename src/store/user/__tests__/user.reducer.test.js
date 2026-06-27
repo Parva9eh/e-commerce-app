@@ -1,7 +1,28 @@
 import { userReducer, INITIAL_STATE } from "../user.reducer";
-import { signInSuccess, signOutSuccess, signInFailed, signOutFailed, signUpFailed } from "../user.action";
+import {
+  signInSuccess,
+  signOutSuccess,
+  signInFailed,
+  signOutFailed,
+  signUpFailed,
+  googleSignInStart,
+  emailSignInStart,
+  signUpStart,
+} from "../user.action";
 
 describe('User Reducer action tests', () => {
+    test('auth start actions should set isLoading to true and clear error', () => {
+      const expectedState = {
+        ...INITIAL_STATE,
+        isLoading: true,
+        error: null,
+      };
+
+      expect(userReducer(INITIAL_STATE, googleSignInStart())).toEqual(expectedState);
+      expect(userReducer(INITIAL_STATE, emailSignInStart('test@test', 'password'))).toEqual(expectedState);
+      expect(userReducer(INITIAL_STATE, signUpStart('test@test', 'password', 'Test User'))).toEqual(expectedState);
+    });
+
     test('signInSuccess should update currentUser', () => {
       const mockUser = {
         id: 1,
@@ -11,6 +32,8 @@ describe('User Reducer action tests', () => {
       const expectedState = {
         ...INITIAL_STATE,
         currentUser: mockUser,
+        isLoading: false,
+        error: null,
       };
   
       expect(userReducer(INITIAL_STATE, signInSuccess(mockUser))).toEqual(
@@ -22,6 +45,8 @@ describe('User Reducer action tests', () => {
         const expectedState = {
           ...INITIAL_STATE,
           currentUser: null,
+          isLoading: false,
+          error: null,
         };
     
         expect(userReducer(INITIAL_STATE, signOutSuccess())).toEqual(expectedState);
@@ -32,6 +57,7 @@ describe('User Reducer action tests', () => {
     
         const expectedState = {
           ...INITIAL_STATE,
+          isLoading: false,
           error: mockError,
         };
     
@@ -45,6 +71,7 @@ describe('User Reducer action tests', () => {
     
         const expectedState = {
           ...INITIAL_STATE,
+          isLoading: false,
           error: mockError,
         };
     
@@ -58,6 +85,7 @@ describe('User Reducer action tests', () => {
     
         const expectedState = {
           ...INITIAL_STATE,
+          isLoading: false,
           error: mockError,
         };
     
