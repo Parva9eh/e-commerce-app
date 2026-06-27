@@ -1,4 +1,4 @@
-import { AnyAction } from "redux-saga";
+import { AnyAction } from "redux";
 import { Category } from "./category.types";
 import { fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailed } from "./category.action";
 
