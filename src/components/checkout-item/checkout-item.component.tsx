@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, memo } from 'react';
 import {CheckoutItemContainer, ImageContainer, BaseSpan, Quantity, Arrow, Value, RemoveButton} from './checkout-item.styles';
 import { useDispatch } from 'react-redux';

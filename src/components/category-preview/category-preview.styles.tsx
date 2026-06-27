@@ -1,5 +1,7 @@
+'use client';
+
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export const CategoryPreviewContainer = styled.div`
     display: flex;

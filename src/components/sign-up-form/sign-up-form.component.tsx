@@ -1,3 +1,5 @@
+'use client';
+
 import {useState, FormEvent, ChangeEvent} from "react";
 import { useDispatch } from "react-redux";
 import {SignUpContainer} from "./sign-up-form.styles";

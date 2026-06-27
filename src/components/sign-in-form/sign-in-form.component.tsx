@@ -1,3 +1,5 @@
+'use client';
+
 import {useState, FormEvent, ChangeEvent} from "react";
 import { AuthError, AuthErrorCodes } from "@firebase/auth";
 import {SignInContainer, ButtonsContainer} from "./sign-in-form.styles";

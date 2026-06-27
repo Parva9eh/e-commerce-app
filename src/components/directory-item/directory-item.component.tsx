@@ -1,19 +1,22 @@
+'use client';
+
 import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {DirectoryItemContainer, BackgroundImage, Body} from './directory-item.styles';
-import { DirectoryCategory } from '../directory/directory.component';
+import { useRouter } from 'next/navigation';
+import { DirectoryItemContainer, BackgroundImage, Body } from './directory-item.styles';
+import { DirectoryCategory } from '@/components/directory/directory.component';
 
 type DirectoryItemProps = {
   category: DirectoryCategory;
 };
 
 const DirectoryItem: FC<DirectoryItemProps> = ({ category }) => {
-  const navigate = useNavigate();
+  const router = useRouter();
   const { imageUrl, title, route } = category;
-  const onNavigateHandler = () => navigate(route);
+  const onNavigateHandler = () => router.push(`/${route}`);
+
   return (
     <DirectoryItemContainer onClick={onNavigateHandler}>
-      <BackgroundImage $imageUrl= {`${imageUrl}`} />
+      <BackgroundImage $imageUrl={`${imageUrl}`} />
       <Body>
         <h2>{title}</h2>
         <p>Shop Now</p>

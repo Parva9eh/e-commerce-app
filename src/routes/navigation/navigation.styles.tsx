@@ -1,5 +1,7 @@
+'use client';
+
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export const NavigationContainer = styled.div`
   height: 70px;
@@ -43,3 +45,11 @@ export const NavLink = styled(Link)`
   }
 `;
 
+export const SignOutButton = styled.span`
+  padding: 10px 15px;
+  cursor: pointer;
+
+  @media screen and (max-width: 800px) {
+    width: 80%;
+  }
+`;

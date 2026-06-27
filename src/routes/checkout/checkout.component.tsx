@@ -1,3 +1,5 @@
+'use client';
+
 import {CheckoutContainer, CheckoutHeader, HeaderBlock, Total} from './checkout.styles';
 import { useSelector } from 'react-redux';
 import { selectCartItems,selectCartTotal } from '../../store/cart/cart.selector';

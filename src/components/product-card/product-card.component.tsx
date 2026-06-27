@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from "react";
 import {ProductCardContainer, Footer, Name, Price} from "./product-card.styles";
 import { useDispatch } from "react-redux";

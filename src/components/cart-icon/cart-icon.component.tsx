@@ -1,3 +1,4 @@
+'use client';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectIsCartOpen, selectCartCount } from '../../store/cart/cart.selector';

@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import {CategoryPreviewContainer, Title, Preview} from './category-preview.styles';
 import ProductCard from '../product-card/product-card.component';
@@ -12,7 +14,7 @@ const CategoryPreview: FC<CategoryPreviewProps> = ({title, products}) =>{
     return(
         <CategoryPreviewContainer>
             <h2>
-                <Title to={title}>
+                <Title href={`/shop/${title}`}>
                    {title.toUpperCase()}
                 </Title>
             </h2>
