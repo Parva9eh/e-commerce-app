@@ -1,5 +1,5 @@
-import Home from '@/routes/home/home.component';
+import Directory from '@/components/directory/directory.component';
 
 export default function HomePage() {
-  return <Home />;
+  return <Directory />;
 }

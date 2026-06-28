@@ -10,7 +10,6 @@ import {
     signOut,
     onAuthStateChanged,
     User,
-    NextOrObserver,
 } from 'firebase/auth';
 import {
     getFirestore,
@@ -121,9 +120,6 @@ export const createUserDocumentFromAuth = async (
   }
 
   export const signOutUser = async () => await signOut(auth);
-
-  export const onAuthStateChangedListener = (callback: NextOrObserver<User>) =>
-  onAuthStateChanged(auth, callback);
 
   export const getCurrentUser = (): Promise<User | null> => {
     return new Promise((resolve, reject) => {
