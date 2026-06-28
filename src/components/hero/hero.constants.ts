@@ -1,16 +1,9 @@
+import { MARKETING_IMAGES } from '@/lib/marketing-images';
+
 export const HERO_IMAGES = {
-  primary: {
-    src: 'https://i.ibb.co/px2tCc3/jackets.png',
-    alt: 'Jackets collection',
-  },
-  secondary: {
-    src: 'https://i.ibb.co/0jqHpnp/sneakers.png',
-    alt: 'Sneakers collection',
-  },
-  accent: {
-    src: 'https://i.ibb.co/cvpntL1/hats.png',
-    alt: 'Hats collection',
-  },
+  primary: MARKETING_IMAGES.jackets,
+  secondary: MARKETING_IMAGES.sneakers,
+  accent: MARKETING_IMAGES.hats,
 } as const;
 
 export const HERO_CATEGORIES = [
