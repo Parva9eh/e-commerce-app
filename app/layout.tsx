@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { openSansCondensed } from '@/lib/fonts';
+import { openSansCondensed, openSansCondensedBold } from '@/lib/fonts';
 import Providers from '@/providers/providers';
 import Navigation from '@/routes/navigation/navigation.component';
 import PageContainer from '@/components/page-container/page-container.component';

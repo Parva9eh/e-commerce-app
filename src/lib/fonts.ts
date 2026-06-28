@@ -12,14 +12,20 @@ export const openSansCondensed = localFont({
       weight: '400',
       style: 'normal',
     },
-    {
-      path: '../../public/fonts/open-sans-condensed-latin-700-normal.woff2',
-      weight: '700',
-      style: 'normal',
-    },
   ],
   display: 'swap',
   variable: '--font-open-sans-condensed',
   adjustFontFallback: 'Arial',
   fallback: ['sans-serif'],
+});
+
+export const openSansCondensedBold = localFont({
+  src: '../../public/fonts/open-sans-condensed-latin-700-normal.woff2',
+  weight: '700',
+  style: 'normal',
+  display: 'swap',
+  preload: false,
+  declarations: [
+    { prop: 'font-family', value: 'openSansCondensed' },
+  ],
 });
