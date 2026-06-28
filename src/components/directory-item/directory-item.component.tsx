@@ -15,8 +15,12 @@ const DirectoryItem: FC<DirectoryItemProps> = ({ category }) => {
   const onNavigateHandler = () => router.push(`/${route}`);
 
   return (
-    <DirectoryItemContainer onClick={onNavigateHandler}>
-      <BackgroundImage $imageUrl={`${imageUrl}`} />
+    <DirectoryItemContainer
+      type="button"
+      onClick={onNavigateHandler}
+      aria-label={`Shop ${title}`}
+    >
+      <BackgroundImage $imageUrl={imageUrl} />
       <Body>
         <h2>{title}</h2>
         <p>Shop Now</p>

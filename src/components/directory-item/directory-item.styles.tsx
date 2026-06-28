@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { focusVisible } from '@/styles/mixins';
+import { media } from '@/styles/theme';
 
 type BackgroundImageProps = {
   $imageUrl: string;
@@ -19,35 +21,44 @@ export const Body = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
-  background-color: white;
-  opacity: 0.7;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.surface};
+  opacity: 0.85;
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 
   h2 {
-    font-weight: bold;
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
     margin: 0 6px 0;
-    font-size: 22px;
-    color: #4a4a4a;
+    font-size: ${({ theme }) => theme.fontSizes.lg};
+    color: ${({ theme }) => theme.colors.textMuted};
     text-transform: uppercase;
   }
 
   p {
-    font-weight: lighter;
-    font-size: 16px;
+    font-weight: ${({ theme }) => theme.fontWeights.light};
+    font-size: ${({ theme }) => theme.fontSizes.body};
+    margin: 0;
   }
 `;
 
-export const DirectoryItemContainer = styled.div`
+export const DirectoryItemContainer = styled.button`
   min-width: 30%;
   height: 240px;
   flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid black;
+  border: 1px solid ${({ theme }) => theme.colors.border};
   margin: 0 7.5px 15px;
   overflow: hidden;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  position: relative;
 
   &:first-child {
     margin-right: 7.5px;
@@ -58,19 +69,19 @@ export const DirectoryItemContainer = styled.div`
   }
 
   &:hover {
-    cursor: pointer;
-
     ${BackgroundImage} {
       transform: scale(1.1);
       transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
     }
 
     ${Body} {
-      opacity: 0.9;
+      opacity: 0.95;
     }
   }
 
-  @media screen and (max-width: 800px) {
+  ${focusVisible}
+
+  ${media.tablet} {
     height: 200px;
   }
 `;

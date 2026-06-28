@@ -1,7 +1,14 @@
 'use client';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { NavigationContainer, LogoContainer, NavLinks, NavLink, SignOutButton } from './navigation.styles';
+import {
+  NavigationContainer,
+  LogoContainer,
+  NavLinks,
+  NavLink,
+  SignOutButton,
+  CartActionsContainer,
+} from './navigation.styles';
 import CartIcon from '@/components/cart-icon/cart-icon.component';
 import CartDropdown from '@/components/cart-dropdown/cart-dropdown.component';
 import { signOutStart } from '@/store/user/user.action';
@@ -17,19 +24,23 @@ const Navigation = () => {
 
   return (
     <NavigationContainer>
-      <LogoContainer href="/">
-        <CrwnLogo className="logo" />
+      <LogoContainer href="/" aria-label="Crown Clothing home">
+        <CrwnLogo />
       </LogoContainer>
       <NavLinks>
         <NavLink href="/shop">SHOP</NavLink>
         {currentUser ? (
-          <SignOutButton onClick={signOutUser}>SIGN OUT</SignOutButton>
+          <SignOutButton type="button" onClick={signOutUser}>
+            SIGN OUT
+          </SignOutButton>
         ) : (
           <NavLink href="/auth">SIGN IN</NavLink>
         )}
-        <CartIcon />
+        <CartActionsContainer>
+          <CartIcon />
+          {isCartOpen && <CartDropdown />}
+        </CartActionsContainer>
       </NavLinks>
-      {isCartOpen && <CartDropdown />}
     </NavigationContainer>
   );
 };
