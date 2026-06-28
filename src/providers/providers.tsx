@@ -6,7 +6,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { store, persistor } from '@/store/store';
 import { stripePromise } from '@/utils/stripe/stripe.utils';
 import { GlobalStyle } from '@/global.styles';
-import SessionChecker from './session-checker';
+import AppInitializer from './app-initializer';
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -14,7 +14,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
       <PersistGate loading={null} persistor={persistor}>
         <Elements stripe={stripePromise}>
           <GlobalStyle />
-          <SessionChecker />
+          <AppInitializer />
           {children}
         </Elements>
       </PersistGate>
