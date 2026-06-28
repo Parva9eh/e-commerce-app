@@ -1,7 +1,9 @@
 import { render } from "@testing-library/react";
 import { Provider } from "react-redux";
+import { ThemeProvider } from "styled-components";
 import { createStore } from "redux";
 import { rootReducer } from '@/store/root-reducer';
+import { theme } from '@/styles/theme';
 
 export function renderWithProviders(
     ui,
@@ -15,7 +17,9 @@ export function renderWithProviders(
     const Wrapper = ({children}) => {
         return(
             <Provider store={store}>
-                {children}
+                <ThemeProvider theme={theme}>
+                    {children}
+                </ThemeProvider>
             </Provider>
         )
     }

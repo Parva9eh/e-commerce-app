@@ -1,19 +1,20 @@
 import styled from 'styled-components';
 import { SpinnerContainer } from '@/components/spinner/spinner.styles';
+import { focusVisible } from '@/styles/mixins';
 
 export const BaseButton = styled.button`
   min-width: 165px;
   width: auto;
   height: 50px;
-  letter-spacing: 0.5px;
+  letter-spacing: ${({ theme }) => theme.letterSpacing.button};
   line-height: 50px;
-  padding: 0 35px 0 35px;
+  padding: 0 35px;
   font-size: 15px;
-  background-color: black;
-  color: white;
+  background-color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.background};
   text-transform: uppercase;
-  font-family: 'Open Sans Condensed';
-  font-weight: bolder;
+  font-family: ${({ theme }) => theme.fonts.primary};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
   border: none;
   cursor: pointer;
   display: flex;
@@ -21,30 +22,33 @@ export const BaseButton = styled.button`
   align-items: center;
 
   &:hover {
-      background-color: white;
-      color: black;
-      border: 1px solid black;
-    }
+    background-color: ${({ theme }) => theme.colors.background};
+    color: ${({ theme }) => theme.colors.text};
+    border: 1px solid ${({ theme }) => theme.colors.text};
+  }
+
+  ${focusVisible}
 `;
 
 export const GoogleSignInButton = styled(BaseButton)`
-  background-color: #4285f4;
-  color: white;
-  
+  background-color: ${({ theme }) => theme.colors.google};
+  color: ${({ theme }) => theme.colors.background};
+
   &:hover {
-    background-color: #357ae8;
+    background-color: ${({ theme }) => theme.colors.googleHover};
     border: none;
+    color: ${({ theme }) => theme.colors.background};
   }
 `;
 
 export const InvertedButton = styled(BaseButton)`
-  background-color: white;
-  color: black;
-  border: 1px solid black;
-  
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+  border: 1px solid ${({ theme }) => theme.colors.text};
+
   &:hover {
-    background-color: black;
-    color: white;
+    background-color: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.background};
     border: none;
   }
 `;
