@@ -14,6 +14,13 @@ vi.mock('react-redux', async () => {
   };
 });
 
+const signedInUser = {
+  id: 'user-1',
+  displayName: 'Jane Doe',
+  email: 'jane@example.com',
+  createdAt: new Date('2024-01-01'),
+};
+
 describe('Navigation tests', () => {
 
     test('It should render a Sign In link and not a Sign Out link, if there is no currentUser', () => {
@@ -33,11 +40,11 @@ describe('Navigation tests', () => {
 
     });
 
-    test('It should render a Sign Out link and not a Sign In link, if there is a currentUser', () => {
+    test('It should render the user menu and not a Sign In link, if there is a currentUser', () => {
         renderWithProviders(<Navigation />, {
             preLoadedState: {
                 user: {
-                    currentUser: {},
+                    currentUser: signedInUser,
                 }
             }
         });
@@ -45,8 +52,9 @@ describe('Navigation tests', () => {
         const signInLinkElement = screen.queryByText(/sign in/i);
         expect(signInLinkElement).toBeNull();
 
-        const signOutLinkElement = screen.getByText(/sign out/i);
-        expect(signOutLinkElement).toBeInTheDocument();
+        expect(screen.getByText(/hi, jane doe/i)).toBeInTheDocument();
+        expect(screen.getByText(/signed in/i)).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /account menu for jane doe/i })).toBeInTheDocument();
     });
 
     test('It should not render the cart dropdown, if isCartOpen is false', () => {
@@ -79,21 +87,18 @@ describe('Navigation tests', () => {
 
     });
 
-    test('It should dispatch signOutStart action when clicking on the Sign Out link', () => {
+    test('It should dispatch signOutStart action when clicking Sign out in the user menu', () => {
 
         renderWithProviders(<Navigation />, {
             preLoadedState: {
                 user: {
-                    currentUser: {},
+                    currentUser: signedInUser,
                 },
             },
         });
 
-        const signOutLinkElement = screen.getByText(/sign out/i);
-
-        expect(signOutLinkElement).toBeInTheDocument();
-
-        fireEvent.click(signOutLinkElement);
+        fireEvent.click(screen.getByRole('button', { name: /account menu for jane doe/i }));
+        fireEvent.click(screen.getByRole('menuitem', { name: /sign out/i }));
 
         expect(mockDispatch).toHaveBeenCalled();
         expect(mockDispatch).toHaveBeenCalledWith(signOutStart());

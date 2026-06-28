@@ -8,13 +8,12 @@ import {
   LogoContainer,
   NavLinks,
   NavLink,
-  SignOutButton,
   CartActionsContainer,
 } from './navigation.styles';
 import Search from '@/components/search/search.component';
 import CartIcon from '@/components/cart-icon/cart-icon.component';
 import CartDropdown from '@/components/cart-dropdown/cart-dropdown.component';
-import { signOutStart } from '@/store/user/user.action';
+import UserMenu from '@/components/user-menu/user-menu.component';
 import { ReactComponent as CrwnLogo } from '@/assets/crown.svg';
 import { selectCurrentUser } from '@/store/user/user.selector';
 import { selectIsCartOpen } from '@/store/cart/cart.selector';
@@ -25,8 +24,6 @@ const Navigation = () => {
   const isCartOpen = useSelector(selectIsCartOpen);
   const dispatch = useDispatch();
   const cartRef = useRef<HTMLDivElement>(null);
-  const signOutUser = () => dispatch(signOutStart());
-
   useOnClickOutside(cartRef, () => {
     if (isCartOpen) dispatch(setIsCartOpen(false));
   });
@@ -40,9 +37,7 @@ const Navigation = () => {
         <NavLink href="/shop">SHOP</NavLink>
         <Search />
         {currentUser ? (
-          <SignOutButton type="button" onClick={signOutUser}>
-            SIGN OUT
-          </SignOutButton>
+          <UserMenu currentUser={currentUser} />
         ) : (
           <NavLink href="/auth">SIGN IN</NavLink>
         )}

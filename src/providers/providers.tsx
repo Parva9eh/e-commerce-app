@@ -9,6 +9,7 @@ import { store, persistor } from '@/store/store';
 import { GlobalStyle } from '@/global.styles';
 import { theme } from '@/styles/theme';
 import AppInitializer from './app-initializer';
+import AuthSessionFeedback from './auth-session-feedback';
 
 type ProvidersProps = {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ export default function Providers({ children }: ProvidersProps) {
             }}
           />
           <AppInitializer />
+          <AuthSessionFeedback />
           {children}
         </ThemeProvider>
       </PersistGate>

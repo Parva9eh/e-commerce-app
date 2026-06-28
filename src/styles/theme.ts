@@ -55,6 +55,9 @@ export const theme = {
     dropdown: '0 4px 12px rgba(0, 0, 0, 0.15)',
     card: '0 2px 8px rgba(0, 0, 0, 0.08)',
   },
+  zIndex: {
+    dropdown: 10,
+  },
   focusRing: {
     width: '2px',
     color: '#1a1a1a',
