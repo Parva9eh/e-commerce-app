@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import { useSelector } from 'react-redux';
-import { selectCartTotal } from '@/store/cart/cart.selector';
+import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCartTotal, selectCartItems } from '@/store/cart/cart.selector';
 import { selectCurrentUser } from '@/store/user/user.selector';
+import { clearCart } from '@/store/cart/cart.action';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { StripeCardElementOptions } from '@stripe/stripe-js';
 import { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import { theme } from '@/styles/theme';
 import { showError, showSuccess } from '@/utils/toast/toast.utils';
+import { createPurchaseRecord } from '@/utils/firebase/firebase.utils';
 import {
   PaymentFormContainer,
   FormContainer,
@@ -35,7 +38,10 @@ const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
 const PaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
+  const dispatch = useDispatch();
   const amount = useSelector(selectCartTotal);
+  const cartItems = useSelector(selectCartItems);
   const currentUser = useSelector(selectCurrentUser);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
@@ -72,8 +78,24 @@ const PaymentForm = () => {
         },
       });
 
-      if (paymentResult.error) showError(paymentResult.error.message ?? 'Payment failed');
-      else if (paymentResult.paymentIntent?.status === 'succeeded') showSuccess('Payment successful');
+      if (paymentResult.error) {
+        showError(paymentResult.error.message ?? 'Payment failed');
+        return;
+      }
+
+      if (paymentResult.paymentIntent?.status === 'succeeded') {
+        await createPurchaseRecord({
+          userId: (currentUser as { id?: string } | null)?.id ?? null,
+          userEmail: currentUser?.email ?? null,
+          amount,
+          items: cartItems,
+          paymentIntentId: paymentResult.paymentIntent.id,
+        });
+
+        dispatch(clearCart());
+        showSuccess('Payment successful');
+        router.push('/checkout/success');
+      }
     } catch {
       showError('Payment failed. Please try again.');
     } finally {
