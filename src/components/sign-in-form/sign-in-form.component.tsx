@@ -3,6 +3,7 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { SignInContainer, ButtonsContainer, AuthErrorMessage } from './sign-in-form.styles';
 import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
+import GoogleIcon from '@/components/button/google-icon';
 import FormInput from '@/components/form-input/form-input.component';
 import { useDispatch, useSelector } from 'react-redux';
 import { googleSignInStart, emailSignInStart } from '@/store/user/user.action';
@@ -82,7 +83,8 @@ const SignInForm = () => {
             onClick={signInWithGoogle}
             isLoading={isLoading}
           >
-            Google sign in
+            <GoogleIcon />
+            Sign in with Google
           </Button>
         </ButtonsContainer>
       </form>
