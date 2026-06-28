@@ -1,4 +1,4 @@
-import { UserData } from '@/utils/firebase/firebase.utils';
+import type { UserData } from '@/utils/firebase/firebase.utils';
 
 export type CurrentUser = UserData & { id: string };
 
