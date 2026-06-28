@@ -173,13 +173,15 @@ export const HeroImageStack = styled.div`
   }
 `;
 
-export const HeroImage = styled.div<{ $imageUrl: string }>`
+export const HeroImage = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-image: url(${({ $imageUrl }) => $imageUrl});
-  transition: transform 0.6s ease;
+
+  img {
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
 `;
 
 export const HeroImageCard = styled.div<{ $variant: HeroImageVariant }>`
@@ -190,7 +192,7 @@ export const HeroImageCard = styled.div<{ $variant: HeroImageVariant }>`
   background-color: ${({ theme }) => theme.colors.surface};
   box-shadow: ${({ theme }) => theme.shadows.card};
 
-  &:hover ${HeroImage} {
+  &:hover img {
     transform: scale(1.04);
   }
 

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { HERO_CATEGORIES, HERO_FEATURES, HERO_IMAGES } from './hero.constants';
 import {
@@ -48,15 +49,29 @@ const Hero = () => (
 
       <HeroVisual aria-hidden="true">
         <HeroImageStack>
-          <HeroImageCard $variant="primary">
-            <HeroImage $imageUrl={HERO_IMAGES.primary.src} role="img" aria-label={HERO_IMAGES.primary.alt} />
-          </HeroImageCard>
-          <HeroImageCard $variant="secondary">
-            <HeroImage $imageUrl={HERO_IMAGES.secondary.src} role="img" aria-label={HERO_IMAGES.secondary.alt} />
-          </HeroImageCard>
-          <HeroImageCard $variant="accent">
-            <HeroImage $imageUrl={HERO_IMAGES.accent.src} role="img" aria-label={HERO_IMAGES.accent.alt} />
-          </HeroImageCard>
+          {(
+            [
+              { variant: 'primary', image: HERO_IMAGES.primary, priority: true },
+              { variant: 'secondary', image: HERO_IMAGES.secondary, priority: false },
+              { variant: 'accent', image: HERO_IMAGES.accent, priority: false },
+            ] as const
+          ).map(({ variant, image, priority }) => (
+            <HeroImageCard key={variant} $variant={variant}>
+              <HeroImage>
+                <Image
+                  src={image.src}
+                  alt={image.alt}
+                  fill
+                  priority={priority}
+                  sizes={
+                    variant === 'primary'
+                      ? '(max-width: 800px) 76vw, 36vw'
+                      : '(max-width: 800px) 40vw, 20vw'
+                  }
+                />
+              </HeroImage>
+            </HeroImageCard>
+          ))}
         </HeroImageStack>
       </HeroVisual>
     </HeroGrid>
