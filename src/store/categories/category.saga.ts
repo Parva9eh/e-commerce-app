@@ -1,6 +1,6 @@
 import { takeLatest, all, call, put } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { getCollectionAndDocuments } from '../../utils/firebase/firebase.utils';
+import { getCollectionAndDocuments } from '@/utils/firebase/firebase.utils';
 import { fetchCategoriesSuccess, fetchCategoriesFailed } from './category.action';
 import { CATEGORIES_ACTION_TYPES } from './category.types';
  

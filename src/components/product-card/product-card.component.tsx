@@ -3,9 +3,9 @@
 import { FC } from "react";
 import {ProductCardContainer, Footer, Name, Price} from "./product-card.styles";
 import { useDispatch } from "react-redux";
-import Button, {BUTTON_TYPE_CLASSES} from "../button/button.component";
-import { addItemToCart } from "../../store/cart/cart.action";
-import { CategoryItem } from '../../store/categories/category.types';
+import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
+import { addItemToCart } from '@/store/cart/cart.action';
+import { CategoryItem } from '@/store/categories/category.types';
 
 type ProductCardProps = {
     product: CategoryItem;

@@ -1,4 +1,4 @@
-import { createAction } from "../reducer/reducer.utils";
+import { createAction } from '@/utils/reducer/reducer.utils';
 
 describe('reducer utils', () => {
     const testType = 'test';

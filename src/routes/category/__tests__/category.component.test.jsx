@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../../../utils/test/test.utils";
-import Category from "../category.component";
+import { renderWithProviders } from '@/utils/test/test.utils';
+import Category from '@/routes/category/category.component';
 
 describe('Category tests', () => {
 

@@ -1,6 +1,6 @@
-import { CategoryItem } from "../categories/category.types";
+import { CategoryItem } from "@/store/categories/category.types";
 import { CART_ACTION_TYPES, CartItem } from "./cart.types";
-import { createAction, ActionWithPayload, withMatcher } from "../../utils/reducer/reducer.utils";
+import { createAction, ActionWithPayload, withMatcher } from "@/utils/reducer/reducer.utils";
 
 export type SetIsCartOpen = ActionWithPayload<CART_ACTION_TYPES.SET_IS_CART_OPEN, boolean>;
 export type AddItem = ActionWithPayload<CART_ACTION_TYPES.ADD_ITEM, CategoryItem>;

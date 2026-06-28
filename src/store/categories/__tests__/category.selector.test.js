@@ -1,4 +1,4 @@
-import { selectCategories, selectIsCategoriesLoading, selectCategoriesMap } from "../category.selector";
+import { selectCategories, selectIsCategoriesLoading, selectCategoriesMap } from '@/store/categories/category.selector';
 
 const mockState = {
     categories:{

@@ -2,10 +2,10 @@
 
 import { useState, FormEvent } from "react";
 import { useSelector } from "react-redux";
-import { selectCartTotal } from "../../store/cart/cart.selector";
-import { selectCurrentUser } from "../../store/user/user.selector";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { BUTTON_TYPE_CLASSES } from '../button/button.component';
+import { selectCartTotal } from '@/store/cart/cart.selector';
+import { selectCurrentUser } from '@/store/user/user.selector';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import { PaymentFormContainer, FormContainer, PaymentButton } from "./payment-form.styles";
 
 const PaymentForm = () =>{
@@ -23,13 +23,13 @@ const PaymentForm = () =>{
         setIsProcessingPayment(true);
 
         try {
-            const response = await fetch("/api/create-payment-intent", {
+            const response = await fetch('/api/create-payment-intent', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({amount: amount * 100})
-            }).then((res)=>res.json());
+                body: JSON.stringify({ amount: amount * 100 }),
+            }).then((res) => res.json());
 
             const clientSecret = response?.paymentIntent?.client_secret;
             if (!clientSecret) {

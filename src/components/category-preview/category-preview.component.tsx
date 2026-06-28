@@ -2,8 +2,8 @@
 
 import { FC } from 'react';
 import {CategoryPreviewContainer, Title, Preview} from './category-preview.styles';
-import ProductCard from '../product-card/product-card.component';
-import { CategoryItem } from '../../store/categories/category.types';
+import ProductCard from '@/components/product-card/product-card.component';
+import { CategoryItem } from '@/store/categories/category.types';
 
 type CategoryPreviewProps = {
     title: string;

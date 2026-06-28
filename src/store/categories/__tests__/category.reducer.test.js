@@ -1,5 +1,5 @@
-import { categoriesReducer, CATEGORIES_INITIAL_STATE } from "../category.reducer";
-import { fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailed } from "../category.action";
+import { categoriesReducer, CATEGORIES_INITIAL_STATE } from '@/store/categories/category.reducer';
+import { fetchCategoriesStart, fetchCategoriesSuccess, fetchCategoriesFailed } from '@/store/categories/category.action';
 
 describe('Category Reducer tests', () => {
 

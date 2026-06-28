@@ -1,4 +1,4 @@
-import { CategoryItem } from '../categories/category.types';
+import { CategoryItem } from '@/store/categories/category.types';
 import { CartItem } from './cart.types';
 
 export const addCartItem = (cartItems: CartItem[], productToAdd: CategoryItem): CartItem[] => {

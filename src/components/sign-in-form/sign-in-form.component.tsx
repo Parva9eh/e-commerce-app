@@ -2,12 +2,12 @@
 
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { SignInContainer, ButtonsContainer, AuthErrorMessage } from './sign-in-form.styles';
-import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
-import FormInput from '../form-input/form-input.component';
+import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
+import FormInput from '@/components/form-input/form-input.component';
 import { useDispatch, useSelector } from 'react-redux';
-import { googleSignInStart, emailSignInStart } from '../../store/user/user.action';
-import { selectUserIsLoading, selectUserError } from '../../store/user/user.selector';
-import { getAuthErrorMessage } from '../../utils/auth/auth-error.utils';
+import { googleSignInStart, emailSignInStart } from '@/store/user/user.action';
+import { selectUserIsLoading, selectUserError } from '@/store/user/user.selector';
+import { getAuthErrorMessage } from '@/utils/auth/auth-error.utils';
 
 const defaultFormFields = {
   email: '',

@@ -1,5 +1,5 @@
 import {initializeApp} from 'firebase/app';
-import { Category } from '../../store/categories/category.types';
+import { Category } from '@/store/categories/category.types';
 import {
     getAuth, 
     signInWithRedirect, 

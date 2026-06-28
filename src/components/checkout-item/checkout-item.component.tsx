@@ -3,8 +3,8 @@
 import { FC, memo } from 'react';
 import {CheckoutItemContainer, ImageContainer, BaseSpan, Quantity, Arrow, Value, RemoveButton} from './checkout-item.styles';
 import { useDispatch } from 'react-redux';
-import { addItemToCart, removeItemFromCart, clearItemFromCart } from '../../store/cart/cart.action';
-import { CartItem } from '../../store/cart/cart.types';
+import { addItemToCart, removeItemFromCart, clearItemFromCart } from '@/store/cart/cart.action';
+import { CartItem } from '@/store/cart/cart.types';
 
 type CheckoutItemProps = {
     cartItem: CartItem;

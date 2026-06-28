@@ -1,6 +1,6 @@
 import { screen, fireEvent } from "@testing-library/react";
-import { renderWithProviders } from "../../../utils/test/test.utils";
-import ProductCard from "../product-card.component";
+import { renderWithProviders } from '@/utils/test/test.utils';
+import ProductCard from '@/components/product-card/product-card.component';
 
 describe('Product card tests', () =>{
     test('It should add the Product item when Product Card button is clicked', () => {

@@ -3,11 +3,11 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SignUpContainer, AuthErrorMessage } from './sign-up-form.styles';
-import Button from '../button/button.component';
-import FormInput from '../form-input/form-input.component';
-import { signUpStart } from '../../store/user/user.action';
-import { selectUserIsLoading, selectUserError } from '../../store/user/user.selector';
-import { getAuthErrorMessage } from '../../utils/auth/auth-error.utils';
+import Button from '@/components/button/button.component';
+import FormInput from '@/components/form-input/form-input.component';
+import { signUpStart } from '@/store/user/user.action';
+import { selectUserIsLoading, selectUserError } from '@/store/user/user.selector';
+import { getAuthErrorMessage } from '@/utils/auth/auth-error.utils';
 
 const defaultFormFields = {
   displayName: '',

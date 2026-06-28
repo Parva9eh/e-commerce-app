@@ -7,7 +7,7 @@ import {
   signInAuthUserWithEmailAndPassword,
   createAuthUserWithEmailAndPassword,
   signOutUser,
-} from '../firebase/firebase.utils';
+} from '@/utils/firebase/firebase.utils';
 
 vi.mock('firebase/auth', () => {
   return {

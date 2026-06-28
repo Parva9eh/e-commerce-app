@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 import { screen, fireEvent } from "@testing-library/react";
-import { renderWithProviders } from "../../../utils/test/test.utils";
-import CartDropdown from "../cart-dropdown.component";
+import { renderWithProviders } from '@/utils/test/test.utils';
+import CartDropdown from '@/components/cart-dropdown/cart-dropdown.component';
 
 const mockPush = vi.fn();
 

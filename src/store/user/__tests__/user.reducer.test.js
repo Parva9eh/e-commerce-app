@@ -1,4 +1,4 @@
-import { userReducer, INITIAL_STATE } from "../user.reducer";
+import { userReducer, INITIAL_STATE } from '@/store/user/user.reducer';
 import {
   signInSuccess,
   signOutSuccess,
@@ -8,7 +8,7 @@ import {
   googleSignInStart,
   emailSignInStart,
   signUpStart,
-} from "../user.action";
+} from '@/store/user/user.action';
 
 describe('User Reducer action tests', () => {
     test('auth start actions should set isLoading to true and clear error', () => {

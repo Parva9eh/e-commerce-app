@@ -1,9 +1,9 @@
 import { call } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
-import { fetchCategoriesAsync, onFetchCategories, categoriesSaga } from '../category.saga';
-import { CATEGORIES_ACTION_TYPES } from '../category.types';
-import { getCollectionAndDocuments } from '../../../utils/firebase/firebase.utils';
-import { fetchCategoriesSuccess, fetchCategoriesFailed } from '../category.action';
+import { fetchCategoriesAsync, onFetchCategories, categoriesSaga } from '@/store/categories/category.saga';
+import { CATEGORIES_ACTION_TYPES } from '@/store/categories/category.types';
+import { getCollectionAndDocuments } from '@/utils/firebase/firebase.utils';
+import { fetchCategoriesSuccess, fetchCategoriesFailed } from '@/store/categories/category.action';
 import { throwError } from 'redux-saga-test-plan/providers';
 
 const mockCategoriesArray = [

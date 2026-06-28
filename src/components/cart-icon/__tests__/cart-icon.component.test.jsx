@@ -1,6 +1,6 @@
 import { screen } from "@testing-library/react";
-import { renderWithProviders } from "../../../utils/test/test.utils";
-import CartIcon from "../cart-icon.component";
+import { renderWithProviders } from '@/utils/test/test.utils';
+import CartIcon from '@/components/cart-icon/cart-icon.component';
 
 describe('Cart Icon tests', () => {
     test('Uses preloaded state to render', () => {

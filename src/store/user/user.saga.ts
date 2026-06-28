@@ -20,7 +20,7 @@ import {
     createAuthUserWithEmailAndPassword,
     signOutUser ,
     AdditionalInformation,
-} from '../../utils/firebase/firebase.utils';
+} from '@/utils/firebase/firebase.utils';
 
 export function* getSnapshotFromUserAuth(userAuth: User, additionalDetails?: AdditionalInformation): SagaIterator {
     try{

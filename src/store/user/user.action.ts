@@ -4,11 +4,11 @@ import {
     Action,
     ActionWithPayload,
     withMatcher,
-} from '../../utils/reducer/reducer.utils';
-  
+} from '@/utils/reducer/reducer.utils';
+
 import {
     UserData,
-} from '../../utils/firebase/firebase.utils';
+} from '@/utils/firebase/firebase.utils';
 
 export type CheckUserSession = Action<USER_ACTION_TYPES.CHECK_USER_SESSION>;
 

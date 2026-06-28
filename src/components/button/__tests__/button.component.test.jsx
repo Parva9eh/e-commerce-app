@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import Button, { BUTTON_TYPE_CLASSES } from '../button.component';
+import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import 'jest-styled-components';
 
 describe('button tests', () => {

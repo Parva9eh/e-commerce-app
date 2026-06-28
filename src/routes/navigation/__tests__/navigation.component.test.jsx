@@ -1,8 +1,8 @@
 import { vi } from 'vitest';
 import { screen, fireEvent } from "@testing-library/react";
-import { renderWithProviders } from "../../../utils/test/test.utils";
-import Navigation from "../navigation.component";
-import { signOutStart } from "../../../store/user/user.action";
+import { renderWithProviders } from '@/utils/test/test.utils';
+import Navigation from '@/routes/navigation/navigation.component';
+import { signOutStart } from '@/store/user/user.action';
 
 const mockDispatch = vi.fn();
  
