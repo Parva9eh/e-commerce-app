@@ -10,10 +10,10 @@ import {
     signUpStart,
     signOutStart,
 } from './user.action';
-import { UserData } from '@/utils/firebase/firebase.utils';
+import { CurrentUser } from './user.types';
 
 export type UserState = {
-  readonly currentUser: UserData | null;
+  readonly currentUser: CurrentUser | null;
   readonly isLoading: boolean;
   readonly error: Error | null;
 }

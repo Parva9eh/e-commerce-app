@@ -11,7 +11,6 @@ import { StripeCardElementOptions } from '@stripe/stripe-js';
 import { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import { theme } from '@/styles/theme';
 import { showError, showSuccess } from '@/utils/toast/toast.utils';
-import { createPurchaseRecord } from '@/utils/firebase/firebase.utils';
 import {
   PaymentFormContainer,
   FormContainer,
@@ -57,14 +56,17 @@ const PaymentForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount: amount * 100 }),
+        body: JSON.stringify({ amount: Math.round(amount * 100) }),
       });
 
-      const { clientSecret } = await response.json();
-      if (!clientSecret) {
-        showError('Unable to initialize payment. Please try again.');
+      const data = await response.json();
+
+      if (!response.ok || !data.clientSecret) {
+        showError(data.error ?? 'Unable to initialize payment. Please try again.');
         return;
       }
+
+      const { clientSecret } = data;
 
       const cardDetails = elements.getElement(CardElement);
       if (!cardDetails) return;
@@ -84,17 +86,31 @@ const PaymentForm = () => {
       }
 
       if (paymentResult.paymentIntent?.status === 'succeeded') {
-        await createPurchaseRecord({
-          userId: (currentUser as { id?: string } | null)?.id ?? null,
-          userEmail: currentUser?.email ?? null,
-          amount,
-          items: cartItems,
-          paymentIntentId: paymentResult.paymentIntent.id,
+        const saveResponse = await fetch('/api/save-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            paymentIntentId: paymentResult.paymentIntent.id,
+            userId: currentUser?.id ?? null,
+            userEmail: currentUser?.email ?? null,
+            amount,
+            items: cartItems,
+          }),
         });
 
+        const orderSaved = saveResponse.ok;
         dispatch(clearCart());
-        showSuccess('Payment successful');
-        router.push('/checkout/success');
+
+        if (orderSaved) {
+          showSuccess('Payment successful');
+          router.push('/checkout/success?saved=true');
+          return;
+        }
+
+        showError('Payment succeeded, but we could not save your order confirmation.');
+        router.push('/checkout/success?saved=false');
       }
     } catch {
       showError('Payment failed. Please try again.');
