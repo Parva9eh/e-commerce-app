@@ -9,15 +9,12 @@ import { store, persistor } from '@/store/store';
 import { GlobalStyle } from '@/global.styles';
 import { theme } from '@/styles/theme';
 import AppInitializer from './app-initializer';
-import CategoriesHydrator from './categories-hydrator';
-import { Category } from '@/store/categories/category.types';
 
 type ProvidersProps = {
   children: React.ReactNode;
-  initialCategories?: Category[];
 };
 
-export default function Providers({ children, initialCategories }: ProvidersProps) {
+export default function Providers({ children }: ProvidersProps) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -32,7 +29,6 @@ export default function Providers({ children, initialCategories }: ProvidersProp
             }}
           />
           <AppInitializer />
-          <CategoriesHydrator categories={initialCategories} />
           {children}
         </ThemeProvider>
       </PersistGate>
