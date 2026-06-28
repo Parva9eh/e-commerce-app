@@ -61,6 +61,19 @@ export type UserData = {
   displayName: string;
   email: string;
 };
+
+export const createCurrentUserFromAuth = (
+  userAuth: User,
+  additionalInformation: AdditionalInformation = {},
+): UserData & { id: string } => ({
+  id: userAuth.uid,
+  displayName:
+    additionalInformation.displayName?.trim() ||
+    userAuth.displayName?.trim() ||
+    '',
+  email: userAuth.email ?? '',
+  createdAt: new Date(),
+});
 export const createUserDocumentFromAuth = async (
   userAuth: User,
   additionalInformation = {} as AdditionalInformation,

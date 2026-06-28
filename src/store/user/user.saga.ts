@@ -14,7 +14,8 @@ import {
 } from './user.action';
 import { 
     getCurrentUser,
-    createUserDocumentFromAuth, 
+    createUserDocumentFromAuth,
+    createCurrentUserFromAuth,
     signInWithGooglePopup, 
     signInAuthUserWithEmailAndPassword,
     createAuthUserWithEmailAndPassword,
@@ -31,7 +32,9 @@ export function* getSnapshotFromUserAuth(userAuth: User, additionalDetails?: Add
         );
         yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
     } catch(error){
-        yield put(signInFailed(error as Error));
+        yield put(
+            signInSuccess(createCurrentUserFromAuth(userAuth, additionalDetails))
+        );
     }
 }
 
