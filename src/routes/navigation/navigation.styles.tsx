@@ -21,22 +21,25 @@ export const NavigationContainer = styled.header`
 `;
 
 export const LogoContainer = styled(Link)`
-  height: 100%;
-  width: 70px;
-  padding: 25px;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+  padding: 8px 12px 8px 0;
 
   svg {
-    width: 100%;
+    width: 52px;
     height: auto;
+    display: block;
   }
 
   ${focusVisible}
 
   ${media.tablet} {
-    width: 50px;
-    padding: 0;
+    padding: 4px 8px 4px 0;
+
+    svg {
+      width: 44px;
+    }
   }
 `;
 

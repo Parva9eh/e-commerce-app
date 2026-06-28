@@ -1,62 +1,55 @@
 import styled from 'styled-components';
-import { media } from '@/styles/theme';
 
 export const ProductCardContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  height: 350px;
-  align-items: center;
   position: relative;
+  overflow: hidden;
 
   img {
     width: 100%;
-    height: 95%;
+    aspect-ratio: 3 / 4;
     object-fit: cover;
-    margin-bottom: 5px;
+    display: block;
     transition: opacity 0.2s ease;
   }
 
   button {
     width: 80%;
+    max-width: 100%;
     opacity: 0.9;
     position: absolute;
-    top: 255px;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 52px;
     display: flex;
   }
 
   &:hover img {
     opacity: 0.85;
   }
-
-  ${media.tablet} {
-    width: 40vw;
-
-    button {
-      min-width: unset;
-      padding: 0 10px;
-    }
-  }
-
-  ${media.mobile} {
-    width: 80vw;
-  }
 `;
 
 export const Footer = styled.div`
   width: 100%;
-  height: 5%;
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 0 4px;
   font-size: ${({ theme }) => theme.fontSizes.md};
 `;
 
 export const Name = styled.span`
-  width: 90%;
-  margin-bottom: 15px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const Price = styled.span`
-  width: 10%;
-  white-space: nowrap;
+  flex-shrink: 0;
+  text-align: right;
 `;
