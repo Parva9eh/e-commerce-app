@@ -9,6 +9,7 @@ import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.componen
 import { addItemToCart } from '@/store/cart/cart.action';
 import { CategoryItem } from '@/store/categories/category.types';
 import { formatPrice } from '@/utils/format/format-price';
+import { showSuccess } from '@/utils/toast/toast.utils';
 
 type ProductCardProps = {
   product: CategoryItem;
@@ -18,7 +19,10 @@ type ProductCardProps = {
 const ProductCard: FC<ProductCardProps> = ({ product, category }) => {
   const dispatch = useDispatch();
   const { name, price, imageUrl, id } = product;
-  const addProductToCart = () => dispatch(addItemToCart(product));
+  const addProductToCart = () => {
+    dispatch(addItemToCart(product));
+    showSuccess(`${name} added to cart`);
+  };
   const productHref = category ? `/shop/${category}/${id}` : undefined;
 
   return (

@@ -5,6 +5,7 @@ import {
     addItemToCart,
     removeItemFromCart,
     clearItemFromCart,
+    clearCart,
 } from "./cart.action";
 import { addCartItem, removeCartItem, clearCartItem } from "./cart.utils";
 
@@ -47,6 +48,14 @@ export const cartReducer = (
         return {
             ...state,
             cartItems: clearCartItem(state.cartItems, action.payload),
+        };
+    }
+
+    if (clearCart.match(action)) {
+        return {
+            ...state,
+            cartItems: [],
+            isCartOpen: false,
         };
     }
 

@@ -1,6 +1,8 @@
 'use client';
 
+import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 import {
   NavigationContainer,
   LogoContainer,
@@ -16,12 +18,18 @@ import { signOutStart } from '@/store/user/user.action';
 import { ReactComponent as CrwnLogo } from '@/assets/crown.svg';
 import { selectCurrentUser } from '@/store/user/user.selector';
 import { selectIsCartOpen } from '@/store/cart/cart.selector';
+import { setIsCartOpen } from '@/store/cart/cart.action';
 
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
   const dispatch = useDispatch();
+  const cartRef = useRef<HTMLDivElement>(null);
   const signOutUser = () => dispatch(signOutStart());
+
+  useOnClickOutside(cartRef, () => {
+    if (isCartOpen) dispatch(setIsCartOpen(false));
+  });
 
   return (
     <NavigationContainer>
@@ -38,7 +46,7 @@ const Navigation = () => {
         ) : (
           <NavLink href="/auth">SIGN IN</NavLink>
         )}
-        <CartActionsContainer>
+        <CartActionsContainer ref={cartRef}>
           <CartIcon />
           {isCartOpen && <CartDropdown />}
         </CartActionsContainer>
