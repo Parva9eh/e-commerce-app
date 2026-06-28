@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 import { focusVisible } from '@/styles/mixins';
 import { media } from '@/styles/theme';
 
@@ -43,7 +44,7 @@ export const Body = styled.div`
   }
 `;
 
-export const DirectoryItemContainer = styled.button`
+export const DirectoryItemContainer = styled(Link)`
   min-width: 30%;
   height: 240px;
   flex: 1 1 auto;
@@ -57,6 +58,8 @@ export const DirectoryItemContainer = styled.button`
   background: none;
   cursor: pointer;
   position: relative;
+  text-decoration: none;
+  color: inherit;
 
   &:first-child {
     margin-right: 7.5px;

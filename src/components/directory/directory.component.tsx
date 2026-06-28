@@ -1,57 +1,25 @@
-'use client';
-
-import { Key } from 'react';
 import DirectoryItem from '@/components/directory-item/directory-item.component';
-import {DirectoryContainer} from './directory.styles';
+import { DIRECTORY_CATEGORIES } from './directory.data';
 
-export type DirectoryCategory = {
-  id: Key;
-  title: string;
-  imageUrl: string;
-  route: string;
+const directoryStyles = {
+  width: '100%',
+  display: 'flex',
+  flexWrap: 'wrap' as const,
+  justifyContent: 'space-between',
 };
 
-const categories: DirectoryCategory[] = [
-  {
-    id: 1,
-    title: 'hats',
-    imageUrl: 'https://i.ibb.co/cvpntL1/hats.png',
-    route: 'shop/hats'
-  },
-  {
-    id: 2,
-    title: 'jackets',
-    imageUrl: 'https://i.ibb.co/px2tCc3/jackets.png',
-    route: 'shop/jackets'
-  },
-  {
-    id: 3,
-    title: 'sneakers',
-    imageUrl: 'https://i.ibb.co/0jqHpnp/sneakers.png',
-    route: 'shop/sneakers'
-  },
-  {
-    id: 4,
-    title: 'womens',
-    imageUrl: 'https://i.ibb.co/GCCdy8t/womens.png',
-    route: 'shop/womens'
-  },
-  {
-    id: 5,
-    title: 'mens',
-    imageUrl: 'https://i.ibb.co/R70vBrQ/men.png',
-    route: 'shop/mens'
-  },
-];
-
-const Directory = () => {
-  return (
-    <DirectoryContainer>
-      {categories.map((category) => (
-        <DirectoryItem key={category.id} category={category} />
-      ))}
-    </DirectoryContainer>
-  );
-};
+const Directory = () => (
+  <div style={directoryStyles}>
+    {DIRECTORY_CATEGORIES.map((category) => (
+      <DirectoryItem
+        key={category.id}
+        title={category.title}
+        imageUrl={category.imageUrl}
+        imageAlt={category.imageAlt}
+        href={category.href}
+      />
+    ))}
+  </div>
+);
 
 export default Directory;
