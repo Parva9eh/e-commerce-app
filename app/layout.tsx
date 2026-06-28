@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Providers from '@/providers/providers';
 import Navigation from '@/routes/navigation/navigation.component';
 import PageContainer from '@/components/page-container/page-container.component';
+import Footer from '@/components/footer/footer.component';
+import { getCategories } from '@/lib/categories';
 
 export const metadata: Metadata = {
   title: 'Crown Clothing',
@@ -9,11 +11,13 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = await getCategories();
+
   return (
     <html lang="en">
       <head>
@@ -25,9 +29,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <Providers>
+        <Providers initialCategories={categories}>
           <Navigation />
           <PageContainer>{children}</PageContainer>
+          <Footer />
         </Providers>
       </body>
     </html>

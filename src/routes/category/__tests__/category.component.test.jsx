@@ -4,8 +4,8 @@ import Category from '@/routes/category/category.component';
 
 describe('Category tests', () => {
 
-    test('It should render a Spinner if isLoading is true', () => {
-        renderWithProviders(<Category category="mens" />, {
+    test('It should render skeleton placeholders if isLoading is true', () => {
+        const { container } = renderWithProviders(<Category category="mens" />, {
             preLoadedState: {
                 categories: {
                     isLoading: true,
@@ -14,9 +14,7 @@ describe('Category tests', () => {
             }
         });
 
-    const spinnerElement = screen.getByTestId('spinner');
-    expect(spinnerElement).toBeInTheDocument();
-
+        expect(container.querySelectorAll('[aria-hidden="true"]').length).toBeGreaterThan(0);
     });
 
     test('It should render products if isLoading is false and there are items present', () => {
@@ -27,20 +25,16 @@ describe('Category tests', () => {
                     categories: [{
                         title: 'mens',
                         items: [
-                            {id: 1, name: 'Product 1'},
-                            {id: 2, name: 'Product 2'}
+                            {id: 1, name: 'Product 1', price: 10, imageUrl: 'https://i.ibb.co/test.png'},
+                            {id: 2, name: 'Product 2', price: 20, imageUrl: 'https://i.ibb.co/test.png'}
                         ]
                     }]
                 }
             }
         });
 
-    const spinnerElement = screen.queryByText('spinner');
-    expect(spinnerElement).toBeNull();
-
-    const product1Element = screen.getByText(/product 1/i);
-    expect(product1Element).toBeInTheDocument();
-
+        const product1Element = screen.getByText(/product 1/i);
+        expect(product1Element).toBeInTheDocument();
     });
 
 })

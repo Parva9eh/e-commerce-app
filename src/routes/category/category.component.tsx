@@ -4,7 +4,8 @@ import { useSelector } from 'react-redux';
 import ProductCard from '@/components/product-card/product-card.component';
 import { CategoryContainer, Title } from './category.styles';
 import { selectCategoriesMap, selectIsCategoriesLoading } from '@/store/categories/category.selector';
-import Spinner from '@/components/spinner/spinner.components';
+import ProductCardSkeleton from '@/components/skeleton/product-card-skeleton.component';
+import { SkeletonGrid } from '@/components/skeleton/skeleton.styles';
 
 type CategoryProps = {
   category: string;
@@ -19,7 +20,11 @@ const Category = ({ category }: CategoryProps) => {
     <>
       <Title>{category.toUpperCase()}</Title>
       {isLoading ? (
-        <Spinner />
+        <SkeletonGrid>
+          {Array.from({ length: 4 }).map((_, index) => (
+            <ProductCardSkeleton key={index} />
+          ))}
+        </SkeletonGrid>
       ) : (
         <CategoryContainer>
           {products &&

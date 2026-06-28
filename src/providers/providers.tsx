@@ -11,8 +11,15 @@ import { stripePromise } from '@/utils/stripe/stripe.utils';
 import { GlobalStyle } from '@/global.styles';
 import { theme } from '@/styles/theme';
 import AppInitializer from './app-initializer';
+import CategoriesHydrator from './categories-hydrator';
+import { Category } from '@/store/categories/category.types';
 
-export default function Providers({ children }: { children: React.ReactNode }) {
+type ProvidersProps = {
+  children: React.ReactNode;
+  initialCategories?: Category[];
+};
+
+export default function Providers({ children, initialCategories }: ProvidersProps) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
@@ -28,6 +35,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
               }}
             />
             <AppInitializer />
+            <CategoriesHydrator categories={initialCategories} />
             {children}
           </Elements>
         </ThemeProvider>
