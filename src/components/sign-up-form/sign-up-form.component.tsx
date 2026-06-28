@@ -8,6 +8,7 @@ import FormInput from '@/components/form-input/form-input.component';
 import { signUpStart } from '@/store/user/user.action';
 import { selectUserIsLoading, selectUserError } from '@/store/user/user.selector';
 import { getAuthErrorMessage } from '@/utils/auth/auth-error.utils';
+import { showError } from '@/utils/toast/toast.utils';
 
 const defaultFormFields = {
   displayName: '',
@@ -37,7 +38,7 @@ const SignUpForm = () => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      alert('Password do not match!');
+      showError('Passwords do not match');
       return;
     }
 

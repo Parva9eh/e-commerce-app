@@ -8,6 +8,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { StripeCardElementOptions } from '@stripe/stripe-js';
 import { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import { theme } from '@/styles/theme';
+import { showError, showSuccess } from '@/utils/toast/toast.utils';
 import {
   PaymentFormContainer,
   FormContainer,
@@ -55,7 +56,7 @@ const PaymentForm = () => {
 
       const { clientSecret } = await response.json();
       if (!clientSecret) {
-        alert('Unable to initialize payment. Please try again.');
+        showError('Unable to initialize payment. Please try again.');
         return;
       }
 
@@ -71,10 +72,10 @@ const PaymentForm = () => {
         },
       });
 
-      if (paymentResult.error) alert(paymentResult.error.message);
-      else if (paymentResult.paymentIntent?.status === 'succeeded') alert('Payment Successful');
+      if (paymentResult.error) showError(paymentResult.error.message ?? 'Payment failed');
+      else if (paymentResult.paymentIntent?.status === 'succeeded') showSuccess('Payment successful');
     } catch {
-      alert('Payment failed. Please try again.');
+      showError('Payment failed. Please try again.');
     } finally {
       setIsProcessingPayment(false);
     }
