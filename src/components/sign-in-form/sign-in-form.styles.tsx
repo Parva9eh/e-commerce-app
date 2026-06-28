@@ -14,3 +14,9 @@ export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const AuthErrorMessage = styled.p`
+  color: #e74c3c;
+  font-size: 14px;
+  margin: 8px 0;
+`;

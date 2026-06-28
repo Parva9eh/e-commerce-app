@@ -9,3 +9,9 @@ export const SignUpContainer = styled.div`
       margin: 10px 0;
     }
 `;
+
+export const AuthErrorMessage = styled.p`
+  color: #e74c3c;
+  font-size: 14px;
+  margin: 8px 0;
+`;
