@@ -13,7 +13,7 @@ This project demonstrates proficiency in modern React development, including sta
 - User authentication (email/password and Google sign-in) using Firebase Auth
 - Responsive & mobile-first design
 - Styled with Styled-Components
-- Stripe checkout (test mode on `main`; simulated in the original course)
+- Stripe checkout in test mode
 
 ## Tech Stack
 
@@ -34,28 +34,61 @@ This project demonstrates proficiency in modern React development, including sta
 - TypeScript
 - Firebase Authentication & Firestore
 - Styled-Components
-- Stripe (checkout via Next.js API route)
+- Stripe (checkout via Next.js API routes)
 - Vitest + React Testing Library
 - Node.js 22
 - Deployed on Vercel
-
-## Usage
-
-- Browsing: Navigate to the shop section to view collections.
-- Cart Management: Click "Add to Cart" on items. Access the cart dropdown from the header.
-- Checkout: Proceed to checkout (Stripe test cards on `main`; simulated in the original course).
-- Authentication: Use the sign-in/sign-up forms in the header to create or access an account.
 
 ## Getting Started (`main` branch)
 
 **Requirements:** Node.js 22+ (see `.nvmrc`)
 
 ```bash
+cp .env.example .env
+# Fill in Firebase, Stripe, and Firebase Admin values
 yarn install
 yarn dev      # http://localhost:3000
-yarn test     # 57 unit/integration tests
+yarn test     # 63 unit/integration tests
 yarn build
 ```
+
+### Environment variables
+
+Copy `.env.example` to `.env` and fill in your values.
+
+| Variable | Scope | Notes |
+|---|---|---|
+| `NEXT_PUBLIC_FIREBASE_*` | Public | Firebase web client config |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Public | Stripe publishable key (`pk_test_...`) |
+| `STRIPE_SECRET_KEY` | Server | Stripe secret key (`sk_test_...`) |
+| `FIREBASE_CLIENT_EMAIL` | Server | Firebase Admin service account |
+| `FIREBASE_PRIVATE_KEY` | Server | Firebase Admin private key |
+
+`NEXT_PUBLIC_` variables are bundled into the browser. Server-only secrets must never use that prefix.
+
+### Stripe test checkout
+
+Use Stripe **test mode** keys from [Stripe Dashboard → Developers → API keys](https://dashboard.stripe.com/test/apikeys).
+
+1. Add items to the cart and go to `/checkout`.
+2. Enter Stripe's standard test card:
+   - **Card number:** `4242 4242 4242 4242`
+   - **Expiry:** any future date (e.g. `12/34`)
+   - **CVC:** any 3 digits (e.g. `123`)
+   - **ZIP:** any 5 digits (e.g. `12345`)
+3. Click **Pay now**.
+4. On success you are redirected to `/checkout/success?saved=true`.
+
+Other useful [Stripe test cards](https://docs.stripe.com/testing#cards):
+- `4000 0000 0000 0002` — card declined
+- `4000 0000 0000 9995` — insufficient funds
+
+## Usage
+
+- **Browsing:** Navigate to the shop section to view collections.
+- **Cart:** Click "Add to Cart" on items. Access the cart dropdown from the header.
+- **Checkout:** Proceed to checkout and pay with a Stripe test card (see above).
+- **Authentication:** Use the sign-in/sign-up forms to create or access an account.
 
 ## App Routes (`main` branch)
 
@@ -64,9 +97,12 @@ yarn build
 | `/` | Home / directory |
 | `/shop` | Category previews |
 | `/shop/[category]` | Category product grid |
+| `/shop/[category]/[productId]` | Product detail |
 | `/auth` | Sign in / sign up |
 | `/checkout` | Cart review + Stripe payment |
+| `/checkout/success` | Order confirmation |
 | `/api/create-payment-intent` | Stripe payment intent (API route) |
+| `/api/save-order` | Persist order after payment (API route) |
 
 ## Repository Branches
 
@@ -125,9 +161,9 @@ Before Phase 1, several bugs and quality issues from the course capstone were ad
 - Migrated to **Next.js 15** with the **App Router**
 - Replaced React Router with file-based routing (`app/`)
 - Moved Stripe payment intent creation to a **Next.js API route** (`/api/create-payment-intent`)
+- Added server-side order persistence via **Firebase Admin SDK** (`/api/save-order`)
 - Added a shared **Providers** shell (Redux, PersistGate, Stripe Elements)
 - Deployed on **Vercel**
-- Netlify builds are skipped via `netlify.toml` (deploys run on Vercel)
 
 The `main` branch reflects the current Next.js + Vercel setup. Earlier migration work remains available on `feat/vite-migration` and `feat/nextjs-vercel`.
 
