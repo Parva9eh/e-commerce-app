@@ -27,7 +27,7 @@ export const getFirebaseConfig = () => {
 
     throw new Error(
       `Missing required environment variables: ${missingEnvVars.join(', ')}. ` +
-        'Copy .env.example to .env, add your Firebase values, and restart the dev server.'
+        'Add them to .env locally or to your Vercel project Environment Variables, then redeploy.'
     );
   }
 
