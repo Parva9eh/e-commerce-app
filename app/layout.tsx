@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: 'Crown Clothing',
   description: 'Modern e-commerce shop',
   manifest: '/manifest.json',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/crwn-192x192.png',
+  },
 };
 
 export default async function RootLayout({
