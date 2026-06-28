@@ -1,4 +1,10 @@
 import styled from 'styled-components';
+import Link from 'next/link';
+
+export const ProductLink = styled(Link)`
+  display: block;
+  width: 100%;
+`;
 
 export const ProductCardContainer = styled.div`
   width: 100%;
@@ -39,6 +45,10 @@ export const Name = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 export const Price = styled.span`
