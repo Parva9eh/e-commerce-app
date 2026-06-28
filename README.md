@@ -66,6 +66,18 @@ Copy `.env.example` to `.env` and fill in your values.
 
 `NEXT_PUBLIC_` variables are bundled into the browser. Server-only secrets must never use that prefix.
 
+### Firebase API key restrictions
+
+The Firebase web API key is public by design, but it should be restricted in [Google Cloud Console → Credentials](https://console.cloud.google.com/apis/credentials):
+
+1. Open the browser API key used by this app.
+2. Set **Application restrictions** to **HTTP referrers (web sites)**.
+3. Add:
+   - `http://localhost:*/*`
+   - `https://your-project.vercel.app/*`
+   - `https://*.firebaseapp.com/*`
+4. Save and wait a few minutes for the restriction to propagate.
+
 ### Stripe test checkout
 
 Use Stripe **test mode** keys from [Stripe Dashboard → Developers → API keys](https://dashboard.stripe.com/test/apikeys).
