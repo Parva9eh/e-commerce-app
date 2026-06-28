@@ -1,5 +1,6 @@
 import { FC, memo } from 'react';
-import { CartItemContainer, ItemDetails } from './cart-item.styles';
+import { CartItemContainer, ItemDetails, ImageWrapper } from './cart-item.styles';
+import ProductImageThumbnail from '@/components/product-image/product-image-thumbnail.component';
 import { CartItem as TCartItem } from '@/store/cart/cart.types';
 import { formatPrice } from '@/utils/format/format-price';
 
@@ -12,7 +13,9 @@ const CartItem: FC<CartItemProps> = memo(({ cartItem }) => {
 
   return (
     <CartItemContainer>
-      <img src={imageUrl} alt={name} />
+      <ImageWrapper>
+        <ProductImageThumbnail src={imageUrl} alt={name} />
+      </ImageWrapper>
       <ItemDetails>
         <span>{name}</span>
         <span>

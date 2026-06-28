@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { addItemToCart, removeItemFromCart, clearItemFromCart } from '@/store/cart/cart.action';
 import { CartItem } from '@/store/cart/cart.types';
 import { formatPrice } from '@/utils/format/format-price';
+import ProductImageThumbnail from '@/components/product-image/product-image-thumbnail.component';
 
 type CheckoutItemProps = {
   cartItem: CartItem;
@@ -30,7 +31,7 @@ const CheckoutItem: FC<CheckoutItemProps> = memo(({ cartItem }) => {
   return (
     <CheckoutItemContainer>
       <ImageContainer>
-        <img src={imageUrl} alt={name} />
+        <ProductImageThumbnail src={imageUrl} alt={name} />
       </ImageContainer>
       <BaseSpan>{name}</BaseSpan>
       <Quantity>

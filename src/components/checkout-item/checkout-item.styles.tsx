@@ -22,11 +22,8 @@ export const CheckoutItemContainer = styled.div`
 export const ImageContainer = styled.div`
   width: 23%;
   padding-right: 15px;
-
-  img {
-    width: 100%;
-    height: auto;
-  }
+  position: relative;
+  min-height: 80px;
 
   ${media.tablet} {
     width: 100%;

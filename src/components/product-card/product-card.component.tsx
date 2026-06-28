@@ -2,6 +2,7 @@
 
 import { FC } from 'react';
 import { ProductCardContainer, Footer, Name, Price } from './product-card.styles';
+import ProductImage from '@/components/product-image/product-image.component';
 import { useDispatch } from 'react-redux';
 import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import { addItemToCart } from '@/store/cart/cart.action';
@@ -19,7 +20,7 @@ const ProductCard: FC<ProductCardProps> = ({ product }) => {
 
   return (
     <ProductCardContainer>
-      <img src={imageUrl} alt={name} />
+      <ProductImage src={imageUrl} alt={name} />
       <Footer>
         <Name>{name}</Name>
         <Price>{formatPrice(price)}</Price>

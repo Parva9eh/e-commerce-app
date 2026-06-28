@@ -7,14 +7,6 @@ export const ProductCardContainer = styled.div`
   position: relative;
   overflow: hidden;
 
-  img {
-    width: 100%;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    display: block;
-    transition: opacity 0.2s ease;
-  }
-
   button {
     width: 80%;
     max-width: 100%;
@@ -26,7 +18,7 @@ export const ProductCardContainer = styled.div`
     display: flex;
   }
 
-  &:hover img {
+  &:hover > div:first-of-type img {
     opacity: 0.85;
   }
 `;

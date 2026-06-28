@@ -7,6 +7,17 @@ Object.assign(globalThis, { TextDecoder, TextEncoder });
 
 const MockSvg = (props: object) => createElement('svg', { 'data-testid': 'mock-svg', ...props });
 
+vi.mock('next/image', () => ({
+  default: ({
+    src,
+    alt,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+  }) => createElement('img', { src, alt, ...props }),
+}));
+
 vi.mock('next/link', () => ({
   default: ({
     children,

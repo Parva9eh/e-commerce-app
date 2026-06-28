@@ -5,9 +5,12 @@ export const CartItemContainer = styled.div`
   display: flex;
   height: 80px;
   margin-bottom: 15px;
-  img {
-      width: 30%;
-    }
+`;
+
+export const ImageWrapper = styled.div`
+  width: 30%;
+  position: relative;
+  min-height: 60px;
 `;
 
 export const ItemDetails = styled.div`
@@ -19,6 +22,6 @@ export const ItemDetails = styled.div`
   padding: 10px 20px;
 
   span {
-    font-size: 16px;
+    font-size: ${({ theme }) => theme.fontSizes.body};
   }
 `;
