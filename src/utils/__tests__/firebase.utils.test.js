@@ -3,7 +3,6 @@ import * as firestoreAuth from 'firebase/auth';
 
 import {
   signInWithGooglePopup,
-  signInWithGoogleRedirect,
   signInAuthUserWithEmailAndPassword,
   createAuthUserWithEmailAndPassword,
   signOutUser,
@@ -18,7 +17,6 @@ vi.mock('firebase/auth', () => {
       };
     }),
     signInWithPopup: vi.fn(),
-    signInWithRedirect: vi.fn(),
     signInWithEmailAndPassword: vi.fn(),
     createUserWithEmailAndPassword: vi.fn(),
     onAuthStateChanged: vi.fn(),
@@ -30,11 +28,6 @@ describe('firebase utils', () => {
     test("signInWithGooglePopup to call firestoreAuth's signInWithPopup", () => {
         signInWithGooglePopup();
         expect(firestoreAuth.signInWithPopup).toHaveBeenCalled();
-    });
-
-    test("signInWithGoogleRedirect to call firestoreAuth's signInWithRedirect", () => {
-        signInWithGoogleRedirect();
-        expect(firestoreAuth.signInWithRedirect).toHaveBeenCalled();
     });
 
     test("signInAuthUserWithEmailAndPassword to call firestoreAuth's signInWithEmailAndPassword", () => {
