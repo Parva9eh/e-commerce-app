@@ -14,7 +14,7 @@ export const theme = {
     spinnerAccent: '#636767',
   },
   fonts: {
-    primary: "'Open Sans Condensed', sans-serif",
+    primary: 'var(--font-open-sans-condensed), sans-serif',
   },
   fontSizes: {
     xs: '12px',

@@ -20,8 +20,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={openSansCondensed.className}>
-      <body>
+    <html lang="en" className={openSansCondensed.variable}>
+      <body className={openSansCondensed.className}>
         <Providers>
           <Navigation />
           <PageContainer>{children}</PageContainer>

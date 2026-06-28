@@ -19,4 +19,7 @@ export const openSansCondensed = localFont({
     },
   ],
   display: 'swap',
+  variable: '--font-open-sans-condensed',
+  adjustFontFallback: 'Arial',
+  fallback: ['sans-serif'],
 });
