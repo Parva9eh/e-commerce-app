@@ -1,12 +1,13 @@
 import { takeLatest, all, call, put } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import { getCollectionAndDocuments } from '@/utils/firebase/firebase.utils';
+import { getFirebaseUtils } from '@/utils/firebase/firebase-api';
 import { fetchCategoriesSuccess, fetchCategoriesFailed } from './category.action';
 import { CATEGORIES_ACTION_TYPES } from './category.types';
  
 export function* fetchCategoriesAsync(): SagaIterator {
     try{
-        const categoriesArray = yield call(getCollectionAndDocuments);
+        const firebaseUtils = yield call(getFirebaseUtils);
+        const categoriesArray = yield call(firebaseUtils.getCollectionAndDocuments);
         yield put(fetchCategoriesSuccess(categoriesArray));
     }
     catch(error){

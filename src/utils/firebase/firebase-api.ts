@@ -1,0 +1,1 @@
+export const getFirebaseUtils = () => import('./firebase.utils');

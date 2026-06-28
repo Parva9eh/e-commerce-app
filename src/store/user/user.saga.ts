@@ -12,35 +12,34 @@ import {
     EmailSignInStart,
     SignUpStart,
 } from './user.action';
-import { 
-    getCurrentUser,
-    createUserDocumentFromAuth,
-    createCurrentUserFromAuth,
-    signInWithGooglePopup, 
-    signInAuthUserWithEmailAndPassword,
-    createAuthUserWithEmailAndPassword,
-    signOutUser ,
-    AdditionalInformation,
-} from '@/utils/firebase/firebase.utils';
+import { getFirebaseUtils } from '@/utils/firebase/firebase-api';
+import type { AdditionalInformation } from '@/utils/firebase/firebase.utils';
+
+function* loadFirebaseUtils(): SagaIterator {
+    return yield call(getFirebaseUtils);
+}
 
 export function* getSnapshotFromUserAuth(userAuth: User, additionalDetails?: AdditionalInformation): SagaIterator {
+    const firebaseUtils = yield call(loadFirebaseUtils);
+
     try{
         const userSnapshot = yield call(
-            createUserDocumentFromAuth, 
+            firebaseUtils.createUserDocumentFromAuth, 
             userAuth, 
             additionalDetails
         );
         yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
     } catch(error){
         yield put(
-            signInSuccess(createCurrentUserFromAuth(userAuth, additionalDetails))
+            signInSuccess(firebaseUtils.createCurrentUserFromAuth(userAuth, additionalDetails))
         );
     }
 }
 
 export function* signInWithGoogle(): SagaIterator {
     try{
-        const {user} = yield call(signInWithGooglePopup);
+        const firebaseUtils = yield call(loadFirebaseUtils);
+        const {user} = yield call(firebaseUtils.signInWithGooglePopup);
         yield call(getSnapshotFromUserAuth, user);
     } catch(error){
         yield put(signInFailed(error as Error));
@@ -49,7 +48,8 @@ export function* signInWithGoogle(): SagaIterator {
 
 export function* signInWithEmail({payload: {email, password}}: EmailSignInStart): SagaIterator {
     try{
-        const userCredential = yield call(signInAuthUserWithEmailAndPassword, email, password);
+        const firebaseUtils = yield call(loadFirebaseUtils);
+        const userCredential = yield call(firebaseUtils.signInAuthUserWithEmailAndPassword, email, password);
         if(userCredential){
             const { user } = userCredential;
             yield call(getSnapshotFromUserAuth, user);
@@ -61,7 +61,8 @@ export function* signInWithEmail({payload: {email, password}}: EmailSignInStart)
 
 export function* signUp({payload: {email, password, displayName}}: SignUpStart): SagaIterator {
     try{
-        const userCredential = yield call(createAuthUserWithEmailAndPassword, email, password );
+        const firebaseUtils = yield call(loadFirebaseUtils);
+        const userCredential = yield call(firebaseUtils.createAuthUserWithEmailAndPassword, email, password );
         if(userCredential){
             const { user } = userCredential;
             yield call(getSnapshotFromUserAuth, user, { displayName });
@@ -73,7 +74,8 @@ export function* signUp({payload: {email, password, displayName}}: SignUpStart):
 
 export function* signOut(): SagaIterator {
     try{
-        yield call(signOutUser);
+        const firebaseUtils = yield call(loadFirebaseUtils);
+        yield call(firebaseUtils.signOutUser);
         yield put(signOutSuccess())
     } catch(error){
         yield put(signOutFailed(error as Error));
@@ -82,7 +84,8 @@ export function* signOut(): SagaIterator {
 
 export function* isUserAuthenticated(): SagaIterator {
     try{
-        const userAuth = yield call(getCurrentUser);
+        const firebaseUtils = yield call(loadFirebaseUtils);
+        const userAuth = yield call(firebaseUtils.getCurrentUser);
         if(!userAuth) return;
         yield call(getSnapshotFromUserAuth, userAuth);
     }catch(error){

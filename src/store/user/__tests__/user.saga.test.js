@@ -2,6 +2,7 @@ import { call } from 'redux-saga/effects';
 import { expectSaga, testSaga } from 'redux-saga-test-plan';
 import { throwError } from 'redux-saga-test-plan/providers';
 import { USER_ACTION_TYPES } from '@/store/user/user.types';
+import { getFirebaseUtils } from '@/utils/firebase/firebase-api';
 
 import {
   userSaga,
@@ -21,6 +22,7 @@ import {
 import {
     getCurrentUser,
     createUserDocumentFromAuth,
+    createCurrentUserFromAuth,
     signInWithGooglePopup,
     signInAuthUserWithEmailAndPassword,
     createAuthUserWithEmailAndPassword,
@@ -34,6 +36,21 @@ import {
     signInFailed,
     signInSuccess,
 } from '@/store/user/user.action';
+
+const mockFirebaseUtils = {
+  getCurrentUser,
+  createUserDocumentFromAuth,
+  createCurrentUserFromAuth,
+  signInWithGooglePopup,
+  signInAuthUserWithEmailAndPassword,
+  createAuthUserWithEmailAndPassword,
+  signOutUser,
+};
+
+const withFirebaseUtils = (provides = []) => [
+  [call(getFirebaseUtils), mockFirebaseUtils],
+  ...provides,
+];
 
 describe('user sagas', () => {
     test('userSagas', () => {
@@ -92,7 +109,7 @@ describe('user sagas', () => {
 
     test('signOut saga success path should call signOutUser and put signOutSuccess if succesful', () => {
         return expectSaga(signOut)
-          .provide([[call(signOutUser)]])
+          .provide(withFirebaseUtils([[call(signOutUser)]]))
           .put(signOutSuccess())
           .run();
       });
@@ -101,7 +118,7 @@ describe('user sagas', () => {
         const error = new Error('test Error');
 
         return expectSaga(signOut)
-            .provide([[call(signOutUser), throwError(error)]])
+            .provide(withFirebaseUtils([[call(signOutUser), throwError(error)]]))
             .put(signOutFailed(error))
             .run();
     });
@@ -120,7 +137,7 @@ describe('user sagas', () => {
         };
     
         return expectSaga(signUp, { payload: mockPayload })
-          .provide([
+          .provide(withFirebaseUtils([
             [
               call(createAuthUserWithEmailAndPassword, mockEmail, mockPassword),
               mockUserCredential,
@@ -128,7 +145,7 @@ describe('user sagas', () => {
             [
               call(getSnapshotFromUserAuth, mockUser, { displayName: mockDisplayName }),
             ],
-          ])
+          ]))
           .call(getSnapshotFromUserAuth, mockUser, { displayName: mockDisplayName })
           .run();
     });
@@ -141,12 +158,12 @@ describe('user sagas', () => {
         return expectSaga(signUp, {
           payload: { email: mockEmail, password: mockPassword },
         })
-          .provide([
+          .provide(withFirebaseUtils([
             [
               call(createAuthUserWithEmailAndPassword, mockEmail, mockPassword),
               throwError(mockError),
             ],
-          ])
+          ]))
           .put(signUpFailed(mockError))
           .run();
     });
@@ -155,7 +172,7 @@ describe('user sagas', () => {
         const mockUserAuth = { id: 1, name: 'test' };
 
         return expectSaga(isUserAuthenticated)
-            .provide([[call(getCurrentUser), mockUserAuth]])
+            .provide(withFirebaseUtils([[call(getCurrentUser), mockUserAuth]]))
             .call(getSnapshotFromUserAuth, mockUserAuth)
             .run();
     });
@@ -164,7 +181,7 @@ describe('user sagas', () => {
         const mockError = new Error('test Error');
     
         return expectSaga(isUserAuthenticated)
-          .provide([[call(getCurrentUser), throwError(mockError)]])
+          .provide(withFirebaseUtils([[call(getCurrentUser), throwError(mockError)]]))
           .put(signInFailed(mockError))
           .run();
       });
@@ -178,12 +195,12 @@ describe('user sagas', () => {
         return expectSaga(signInWithEmail, {
             payload: { email: mockEmail, password: mockPassword },
         })
-        .provide([
+        .provide(withFirebaseUtils([
         [
             call(signInAuthUserWithEmailAndPassword, mockEmail, mockPassword),
             mockUserCredential,
         ],
-        ])
+        ]))
         .call(getSnapshotFromUserAuth, mockUser)
         .run();
     });
@@ -196,12 +213,12 @@ describe('user sagas', () => {
         return expectSaga(signInWithEmail, {
           payload: { email: mockEmail, password: mockPassword },
         })
-          .provide([
+          .provide(withFirebaseUtils([
             [
               call(signInAuthUserWithEmailAndPassword, mockEmail, mockPassword),
               throwError(mockError),
             ],
-          ])
+          ]))
           .put(signInFailed(mockError))
           .run();
       });
@@ -211,7 +228,7 @@ describe('user sagas', () => {
         const mockGoogleVal = { user: mockUser };
 
         return expectSaga(signInWithGoogle)
-            .provide([[call(signInWithGooglePopup), mockGoogleVal]])
+            .provide(withFirebaseUtils([[call(signInWithGooglePopup), mockGoogleVal]]))
             .call(getSnapshotFromUserAuth, mockUser)
             .run();
     });
@@ -220,7 +237,7 @@ describe('user sagas', () => {
         const mockError = new Error('test Error');
     
         return expectSaga(signInWithGoogle)
-          .provide([[call(signInWithGooglePopup), throwError(mockError)]])
+          .provide(withFirebaseUtils([[call(signInWithGooglePopup), throwError(mockError)]]))
           .put(signInFailed(mockError))
           .run();
     });
@@ -235,12 +252,12 @@ describe('user sagas', () => {
             mockUserAuth,
             mockAdditionalDetails
         )
-            .provide([
+            .provide(withFirebaseUtils([
             [
                 call(createUserDocumentFromAuth, mockUserAuth, mockAdditionalDetails),
                 mockUserSnapshot,
             ],
-            ])
+            ]))
             .put(
             signInSuccess({ id: mockUserSnapshot.id, ...mockUserSnapshot.data() })
             )
@@ -261,12 +278,12 @@ describe('user sagas', () => {
           mockUserAuth,
           mockAdditionalDetails
         )
-          .provide([
+          .provide(withFirebaseUtils([
             [
               call(createUserDocumentFromAuth, mockUserAuth, mockAdditionalDetails),
               throwError(mockError),
             ],
-          ])
+          ]))
           .run()
           .then(({ allEffects }) => {
             const putEffect = allEffects.find((effect) => effect.type === 'PUT');
