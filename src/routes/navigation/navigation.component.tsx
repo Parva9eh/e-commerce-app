@@ -1,6 +1,5 @@
 'use client';
 
-import { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavigationContainer, LogoContainer, NavLinks, NavLink, SignOutButton } from './navigation.styles';
 import CartIcon from '@/components/cart-icon/cart-icon.component';
@@ -17,23 +16,21 @@ const Navigation = () => {
   const signOutUser = () => dispatch(signOutStart());
 
   return (
-    <Fragment>
-      <NavigationContainer>
-        <LogoContainer href="/">
-          <CrwnLogo className="logo" />
-        </LogoContainer>
-        <NavLinks>
-          <NavLink href="/shop">SHOP</NavLink>
-          {currentUser ? (
-            <SignOutButton onClick={signOutUser}>SIGN OUT</SignOutButton>
-          ) : (
-            <NavLink href="/auth">SIGN IN</NavLink>
-          )}
-          <CartIcon />
-        </NavLinks>
-        {isCartOpen && <CartDropdown />}
-      </NavigationContainer>
-    </Fragment>
+    <NavigationContainer>
+      <LogoContainer href="/">
+        <CrwnLogo className="logo" />
+      </LogoContainer>
+      <NavLinks>
+        <NavLink href="/shop">SHOP</NavLink>
+        {currentUser ? (
+          <SignOutButton onClick={signOutUser}>SIGN OUT</SignOutButton>
+        ) : (
+          <NavLink href="/auth">SIGN IN</NavLink>
+        )}
+        <CartIcon />
+      </NavLinks>
+      {isCartOpen && <CartDropdown />}
+    </NavigationContainer>
   );
 };
 

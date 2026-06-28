@@ -1,3 +1,5 @@
+'use client';
+
 import { Key } from 'react';
 import DirectoryItem from '@/components/directory-item/directory-item.component';
 import {DirectoryContainer} from './directory.styles';

@@ -1,6 +1,5 @@
 'use client';
 
-import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import ProductCard from '@/components/product-card/product-card.component';
 import { CategoryContainer, Title } from './category.styles';
@@ -17,7 +16,7 @@ const Category = ({ category }: CategoryProps) => {
   const products = categoriesMap[category];
 
   return (
-    <Fragment>
+    <>
       <Title>{category.toUpperCase()}</Title>
       {isLoading ? (
         <Spinner />
@@ -29,7 +28,7 @@ const Category = ({ category }: CategoryProps) => {
             ))}
         </CategoryContainer>
       )}
-    </Fragment>
+    </>
   );
 };
 
