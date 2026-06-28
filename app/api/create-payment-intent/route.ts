@@ -21,9 +21,12 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
     });
 
-    return NextResponse.json({ paymentIntent });
+    return NextResponse.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Payment initialization failed' },
+      { status: 400 }
+    );
   }
 }
