@@ -1,44 +1,106 @@
 'use client';
 
-import { FormEvent } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchClear } from '@/hooks/use-search-clear';
+import {
+  buildCurrentPath,
+  getPreSearchPath,
+  setPreSearchPath,
+  updateShopParam,
+} from '@/utils/shop/shop-params';
 import { FiltersContainer, FilterGroup, FilterSelect, MobileSearchInput } from './shop-filters.styles';
 
 const ShopFilters = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+  const inputRef = useRef<HTMLInputElement>(null);
+  const isNavigatingRef = useRef(false);
   const search = searchParams.get('search') ?? '';
   const category = searchParams.get('category') ?? 'all';
   const sort = searchParams.get('sort') ?? 'default';
+  const hasActiveSearch = Boolean(search);
+  const [mobileQuery, setMobileQuery] = useState(search);
 
-  const updateParams = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
+  useEffect(() => {
+    isNavigatingRef.current = false;
+  }, [pathname, search]);
 
-    if (!value || value === 'all' || value === 'default') {
-      params.delete(key);
-    } else {
-      params.set(key, value);
+  useEffect(() => {
+    setMobileQuery(search);
+  }, [search]);
+
+  const updateParams = (key: 'search' | 'category' | 'sort', value: string) => {
+    router.push(updateShopParam(searchParams, key, value));
+  };
+
+  const navigateToPreSearch = useCallback(() => {
+    if (isNavigatingRef.current) {
+      return;
     }
 
-    const query = params.toString();
-    router.push(query ? `/shop?${query}` : '/shop');
-  };
+    isNavigatingRef.current = true;
+    setMobileQuery('');
+
+    const preSearchPath = getPreSearchPath();
+
+    if (preSearchPath) {
+      router.push(preSearchPath);
+      return;
+    }
+
+    router.push(updateShopParam(searchParams, 'search', ''));
+  }, [router, searchParams]);
+
+  const clearSearch = useCallback(() => {
+    if (hasActiveSearch) {
+      navigateToPreSearch();
+      return;
+    }
+
+    setMobileQuery('');
+  }, [hasActiveSearch, navigateToPreSearch]);
+
+  useSearchClear(inputRef, clearSearch, Boolean(mobileQuery.trim()) || hasActiveSearch);
 
   const handleMobileSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const value = String(formData.get('mobile-search') ?? '').trim();
-    updateParams('search', value);
+    const trimmed = mobileQuery.trim();
+
+    if (!trimmed) {
+      if (hasActiveSearch) {
+        navigateToPreSearch();
+      }
+
+      return;
+    }
+
+    setPreSearchPath(buildCurrentPath(pathname, searchParams));
+    updateParams('search', trimmed);
+  };
+
+  const handleMobileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+
+    if (hasActiveSearch && !value.trim()) {
+      navigateToPreSearch();
+      return;
+    }
+
+    setMobileQuery(value);
   };
 
   return (
     <>
       <form onSubmit={handleMobileSearch}>
         <MobileSearchInput
+          ref={inputRef}
           name="mobile-search"
           type="search"
           placeholder="Search products"
-          defaultValue={search}
+          value={mobileQuery}
+          onChange={handleMobileChange}
           aria-label="Search products"
         />
       </form>
