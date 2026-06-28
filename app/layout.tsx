@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { openSansCondensed } from '@/lib/fonts';
 import Providers from '@/providers/providers';
 import Navigation from '@/routes/navigation/navigation.component';
 import PageContainer from '@/components/page-container/page-container.component';
@@ -30,15 +31,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Open+Sans+Condensed:wght@300;400;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={openSansCondensed.className}>
       <body>
         <Providers initialCategories={categories}>
           <Navigation />
