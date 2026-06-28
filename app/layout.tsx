@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Providers from '@/providers/providers';
 import Navigation from '@/routes/navigation/navigation.component';
+import PageContainer from '@/components/page-container/page-container.component';
 
 export const metadata: Metadata = {
   title: 'Crown Clothing',
@@ -26,7 +27,7 @@ export default function RootLayout({
       <body>
         <Providers>
           <Navigation />
-          {children}
+          <PageContainer>{children}</PageContainer>
         </Providers>
       </body>
     </html>

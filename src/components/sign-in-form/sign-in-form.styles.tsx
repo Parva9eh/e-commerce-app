@@ -1,22 +1,37 @@
 import styled from 'styled-components';
+import { media } from '@/styles/theme';
 
 export const SignInContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 380px;
-  
-    h2 {
-      margin: 10px 0;
-    }
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  max-width: 100%;
+  padding: 24px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  box-shadow: ${({ theme }) => theme.shadows.card};
+  background-color: ${({ theme }) => theme.colors.surface};
+
+  h2 {
+    margin: 10px 0;
+  }
+
+  ${media.tablet} {
+    width: 100%;
+  }
 `;
 
 export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  gap: 12px;
+
+  ${media.tablet} {
+    flex-direction: column;
+  }
 `;
 
 export const AuthErrorMessage = styled.p`
-  color: #e74c3c;
-  font-size: 14px;
+  color: ${({ theme }) => theme.colors.error};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
   margin: 8px 0;
 `;
