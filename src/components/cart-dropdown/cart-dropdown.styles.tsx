@@ -1,28 +1,39 @@
 import styled from 'styled-components';
 import { BaseButton, GoogleSignInButton, InvertedButton } from '@/components/button/button.styles';
+import { media } from '@/styles/theme';
 
 export const CartDropdownContainer = styled.div`
   position: absolute;
-  width: 240px;
-  height: 340px;
+  width: 280px;
+  height: 360px;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  border: 1px solid black;
-  background-color: white;
-  top: 90px;
-  right: 40px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.surface};
+  box-shadow: ${({ theme }) => theme.shadows.dropdown};
+  top: calc(100% + 12px);
+  right: 0;
   z-index: 5;
 
   ${BaseButton},
   ${GoogleSignInButton},
-  ${InvertedButton}{
+  ${InvertedButton} {
     margin-top: auto;
+  }
+
+  ${media.tablet} {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    top: 72px;
   }
 `;
 
 export const EmptyMessage = styled.span`
-  font-size: 18px;
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  color: ${({ theme }) => theme.colors.textMuted};
   margin: 50px auto;
 `;
 
@@ -30,6 +41,5 @@ export const CartItems = styled.div`
   height: 240px;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-y: auto;
 `;
-
