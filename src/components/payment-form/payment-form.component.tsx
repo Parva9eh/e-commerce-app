@@ -3,7 +3,7 @@
 import { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCartTotal, selectCartItems } from '@/store/cart/cart.selector';
+import { selectCartItems } from '@/store/cart/cart.selector';
 import { selectCurrentUser } from '@/store/user/user.selector';
 import { clearCart } from '@/store/cart/cart.action';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
@@ -39,7 +39,6 @@ const PaymentForm = () => {
   const elements = useElements();
   const router = useRouter();
   const dispatch = useDispatch();
-  const amount = useSelector(selectCartTotal);
   const cartItems = useSelector(selectCartItems);
   const currentUser = useSelector(selectCurrentUser);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -56,7 +55,9 @@ const PaymentForm = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount: Math.round(amount * 100) }),
+        body: JSON.stringify({
+          items: cartItems.map(({ id, quantity }) => ({ id, quantity })),
+        }),
       });
 
       const data = await response.json();
@@ -95,8 +96,7 @@ const PaymentForm = () => {
             paymentIntentId: paymentResult.paymentIntent.id,
             userId: currentUser?.id ?? null,
             userEmail: currentUser?.email ?? null,
-            amount,
-            items: cartItems,
+            items: cartItems.map(({ id, quantity }) => ({ id, quantity })),
           }),
         });
 
