@@ -1,5 +1,6 @@
+import { Suspense } from 'react';
 import { vi } from 'vitest';
-import { screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent, waitFor } from "@testing-library/react";
 import { renderWithProviders } from '@/utils/test/test.utils';
 import Navigation from '@/routes/navigation/navigation.component';
 import { signOutStart } from '@/store/user/user.action';
@@ -13,6 +14,21 @@ vi.mock('react-redux', async () => {
     useDispatch: () => mockDispatch,
   };
 });
+
+vi.mock('next/dynamic', () => ({
+  default: (loader) => {
+    const React = require('react');
+    const LazyComponent = React.lazy(loader);
+
+    return function DynamicComponent(props) {
+      return (
+        <Suspense fallback={null}>
+          <LazyComponent {...props} />
+        </Suspense>
+      );
+    };
+  },
+}));
 
 const signedInUser = {
   id: 'user-1',
@@ -40,7 +56,7 @@ describe('Navigation tests', () => {
 
     });
 
-    test('It should render the user menu and not a Sign In link, if there is a currentUser', () => {
+    test('It should render the user menu and not a Sign In link, if there is a currentUser', async () => {
         renderWithProviders(<Navigation />, {
             preLoadedState: {
                 user: {
@@ -52,7 +68,9 @@ describe('Navigation tests', () => {
         const signInLinkElement = screen.queryByText(/sign in/i);
         expect(signInLinkElement).toBeNull();
 
-        expect(screen.getByText(/hi, jane doe/i)).toBeInTheDocument();
+        await waitFor(() => {
+          expect(screen.getByText(/hi, jane doe/i)).toBeInTheDocument();
+        });
         expect(screen.getByText(/signed in/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /account menu for jane doe/i })).toBeInTheDocument();
     });
@@ -72,7 +90,7 @@ describe('Navigation tests', () => {
 
     });
 
-    test('It should render the cart dropdown, if isCartOpen is true', () => {
+    test('It should render the cart dropdown, if isCartOpen is true', async () => {
         renderWithProviders(<Navigation />, {
             preLoadedState: {
                 cart: {
@@ -82,12 +100,13 @@ describe('Navigation tests', () => {
             }
         });
 
-        const dropDownTextElement = screen.getByText(/your cart is empty/i);
-        expect(dropDownTextElement).toBeInTheDocument();
+        await waitFor(() => {
+          expect(screen.getByText(/your cart is empty/i)).toBeInTheDocument();
+        });
 
     });
 
-    test('It should dispatch signOutStart action when clicking Sign out in the user menu', () => {
+    test('It should dispatch signOutStart action when clicking Sign out in the user menu', async () => {
 
         renderWithProviders(<Navigation />, {
             preLoadedState: {
@@ -97,7 +116,8 @@ describe('Navigation tests', () => {
             },
         });
 
-        fireEvent.click(screen.getByRole('button', { name: /account menu for jane doe/i }));
+        const accountButton = await screen.findByRole('button', { name: /account menu for jane doe/i });
+        fireEvent.click(accountButton);
         fireEvent.click(screen.getByRole('menuitem', { name: /sign out/i }));
 
         expect(mockDispatch).toHaveBeenCalled();
