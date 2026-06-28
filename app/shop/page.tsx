@@ -1,4 +1,5 @@
-import CategoriesPreview from '@/routes/categories-preview/categories-preview.component';
+import { Suspense } from 'react';
+import Shop from '@/routes/shop/shop.component';
 import { createPageMetadata } from '@/lib/metadata';
 
 export const metadata = createPageMetadata({
@@ -8,5 +9,9 @@ export const metadata = createPageMetadata({
 });
 
 export default function ShopPage() {
-  return <CategoriesPreview />;
+  return (
+    <Suspense fallback={null}>
+      <Shop />
+    </Suspense>
+  );
 }

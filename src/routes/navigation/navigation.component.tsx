@@ -9,6 +9,7 @@ import {
   SignOutButton,
   CartActionsContainer,
 } from './navigation.styles';
+import Search from '@/components/search/search.component';
 import CartIcon from '@/components/cart-icon/cart-icon.component';
 import CartDropdown from '@/components/cart-dropdown/cart-dropdown.component';
 import { signOutStart } from '@/store/user/user.action';
@@ -29,6 +30,7 @@ const Navigation = () => {
       </LogoContainer>
       <NavLinks>
         <NavLink href="/shop">SHOP</NavLink>
+        <Search />
         {currentUser ? (
           <SignOutButton type="button" onClick={signOutUser}>
             SIGN OUT
