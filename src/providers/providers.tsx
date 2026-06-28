@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast';
 import { Elements } from '@stripe/react-stripe-js';
 import { ToastStyles } from '@/components/toast/toast.styles';
 import { store, persistor } from '@/store/store';
-import { stripePromise } from '@/utils/stripe/stripe.utils';
+import { stripePromise } from '@/utils/stripe';
 import { GlobalStyle } from '@/global.styles';
 import { theme } from '@/styles/theme';
 import AppInitializer from './app-initializer';
