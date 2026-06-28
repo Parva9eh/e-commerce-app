@@ -2,16 +2,14 @@ import styled from 'styled-components';
 import { focusVisible } from '@/styles/mixins';
 import { media } from '@/styles/theme';
 
-type BackgroundImageProps = {
-  $imageUrl: string;
-};
+export const BackgroundImage = styled.div`
+  position: absolute;
+  inset: 0;
 
-export const BackgroundImage = styled.div<BackgroundImageProps>`
-  width: 100%;
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-image: ${({ $imageUrl }) => `url(${$imageUrl})`};
+  img {
+    object-fit: cover;
+    transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+  }
 `;
 
 export const Body = styled.div`
@@ -69,9 +67,8 @@ export const DirectoryItemContainer = styled.button`
   }
 
   &:hover {
-    ${BackgroundImage} {
+    ${BackgroundImage} img {
       transform: scale(1.1);
-      transition: transform 6s cubic-bezier(0.25, 0.45, 0.45, 0.95);
     }
 
     ${Body} {

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { FC } from 'react';
 import { useRouter } from 'next/navigation';
 import { DirectoryItemContainer, BackgroundImage, Body } from './directory-item.styles';
@@ -20,7 +21,14 @@ const DirectoryItem: FC<DirectoryItemProps> = ({ category }) => {
       onClick={onNavigateHandler}
       aria-label={`Shop ${title}`}
     >
-      <BackgroundImage $imageUrl={imageUrl} />
+      <BackgroundImage>
+        <Image
+          src={imageUrl}
+          alt=""
+          fill
+          sizes="(max-width: 800px) 50vw, 30vw"
+        />
+      </BackgroundImage>
       <Body>
         <h2>{title}</h2>
         <p>Shop Now</p>
