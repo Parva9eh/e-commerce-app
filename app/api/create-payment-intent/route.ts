@@ -14,9 +14,17 @@ export async function POST(request: NextRequest) {
 
     const stripe = new Stripe(stripeSecretKey);
     const { amount } = await request.json();
+    const amountInCents = Math.round(Number(amount));
+
+    if (!Number.isFinite(amountInCents) || amountInCents < 50) {
+      return NextResponse.json(
+        { error: 'Invalid payment amount' },
+        { status: 400 }
+      );
+    }
 
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
+      amount: amountInCents,
       currency: 'usd',
       payment_method_types: ['card'],
     });
