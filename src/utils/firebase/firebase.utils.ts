@@ -21,13 +21,23 @@ import {
   QueryDocumentSnapshot,
 } from "firebase/firestore";
 
+const requiredPublicEnv = (key: string): string => {
+  const value = process.env[key];
+
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${key}`);
+  }
+
+  return value;
+};
+
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBPlMCdb5YVq8l2E651vwaRUZqzWeMh4FE',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'e-commerce-app-db-e8bfd.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'e-commerce-app-db-e8bfd',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'e-commerce-app-db-e8bfd.appspot.com',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '994314347416',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:994314347416:web:b46f7b78738b66e39381ed',
+  apiKey: requiredPublicEnv('NEXT_PUBLIC_FIREBASE_API_KEY'),
+  authDomain: requiredPublicEnv('NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN'),
+  projectId: requiredPublicEnv('NEXT_PUBLIC_FIREBASE_PROJECT_ID'),
+  storageBucket: requiredPublicEnv('NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET'),
+  messagingSenderId: requiredPublicEnv('NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID'),
+  appId: requiredPublicEnv('NEXT_PUBLIC_FIREBASE_APP_ID'),
 };
 
 initializeApp(firebaseConfig);
