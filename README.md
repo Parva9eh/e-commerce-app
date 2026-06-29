@@ -207,4 +207,4 @@ Feel free to fork this repo and submit pull requests for improvements, bug fixes
 
 ## Crwn Clothing Live Demo
 
-[<img src="public/Crwn Clothing.png" width="400" />](https://e-commerce-crwn-clothing.vercel.app)
+[![Crwn Clothing responsive demo — desktop and mobile views](public/Crwn%20Clothing.png)](https://e-commerce-crwn-clothing.vercel.app)
