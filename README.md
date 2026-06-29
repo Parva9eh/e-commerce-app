@@ -47,9 +47,25 @@ This project demonstrates proficiency in modern React development, including sta
 cp .env.example .env
 # Fill in Firebase, Stripe, and Firebase Admin values
 yarn install
-yarn dev      # http://localhost:3000
-yarn test     # 63 unit/integration tests
+yarn dev         # http://localhost:3000
+yarn dev:clean   # clear stale .next cache, then start dev
+yarn test        # unit/integration tests
+yarn test:e2e    # includes responsive overflow checks
 yarn build
+```
+
+### Local dev troubleshooting
+
+If the app returns **500**, missing chunk errors, or stale assets after many rebuilds, clear the Next.js cache and restart:
+
+```bash
+yarn dev:clean
+```
+
+For a fully clean production check locally:
+
+```bash
+yarn build:clean && yarn start
 ```
 
 ### Environment variables

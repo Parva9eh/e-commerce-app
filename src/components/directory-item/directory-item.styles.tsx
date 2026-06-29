@@ -45,14 +45,12 @@ export const Body = styled.div`
 `;
 
 export const DirectoryItemContainer = styled(Link)`
-  min-width: 30%;
+  width: 100%;
   height: 240px;
-  flex: 1 1 auto;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid ${({ theme }) => theme.colors.border};
-  margin: 0 7.5px 15px;
   overflow: hidden;
   padding: 0;
   background: none;
@@ -60,14 +58,6 @@ export const DirectoryItemContainer = styled(Link)`
   position: relative;
   text-decoration: none;
   color: inherit;
-
-  &:first-child {
-    margin-right: 7.5px;
-  }
-
-  &:last-child {
-    margin-left: 7.5px;
-  }
 
   &:hover {
     ${BackgroundImage} img {
@@ -83,5 +73,9 @@ export const DirectoryItemContainer = styled(Link)`
 
   ${media.tablet} {
     height: 200px;
+  }
+
+  ${media.mobile} {
+    height: 180px;
   }
 `;

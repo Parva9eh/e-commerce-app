@@ -1,15 +1,11 @@
+'use client';
+
 import DirectoryItem from '@/components/directory-item/directory-item.component';
 import { DIRECTORY_CATEGORIES } from './directory.data';
-
-const directoryStyles = {
-  width: '100%',
-  display: 'flex',
-  flexWrap: 'wrap' as const,
-  justifyContent: 'space-between',
-};
+import { DirectoryGrid } from './directory.styles';
 
 const Directory = () => (
-  <div style={directoryStyles}>
+  <DirectoryGrid>
     {DIRECTORY_CATEGORIES.map((category) => (
       <DirectoryItem
         key={category.id}
@@ -20,7 +16,7 @@ const Directory = () => (
         priority={category.priority}
       />
     ))}
-  </div>
+  </DirectoryGrid>
 );
 
 export default Directory;

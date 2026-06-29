@@ -32,6 +32,11 @@ export const FilterSelect = styled.select`
 
   ${media.tablet} {
     min-width: 140px;
+    width: 100%;
+  }
+
+  ${media.mobile} {
+    min-width: 0;
   }
 `;
 
@@ -47,6 +52,10 @@ export const MobileSearchInput = styled.input`
 
   ${media.tablet} {
     display: block;
+  }
+
+  ${media.mobile} {
+    font-size: ${({ theme }) => theme.fontSizes.body};
   }
 
   ${focusVisible}

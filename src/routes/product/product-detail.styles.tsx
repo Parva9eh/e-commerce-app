@@ -25,12 +25,12 @@ export const InfoColumn = styled.div`
 `;
 
 export const ProductTitle = styled.h1`
-  font-size: ${({ theme }) => theme.fontSizes.xxl};
+  font-size: clamp(1.75rem, 5vw, ${({ theme }) => theme.fontSizes.xxl});
   text-transform: capitalize;
 `;
 
 export const ProductPrice = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.display};
+  font-size: clamp(1.5rem, 4vw, ${({ theme }) => theme.fontSizes.display});
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   margin: 0;
 `;

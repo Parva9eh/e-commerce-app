@@ -14,7 +14,7 @@ export const CategoryPreviewContainer = styled.div`
 `;
 
 export const Title = styled(Link)`
-  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-size: clamp(1.25rem, 3.5vw, ${({ theme }) => theme.fontSizes.xl});
   margin-bottom: 25px;
   cursor: pointer;
 

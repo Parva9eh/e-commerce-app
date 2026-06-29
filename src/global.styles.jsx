@@ -27,15 +27,15 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   h1 {
-    font-size: ${({ theme }) => theme.fontSizes.xxl};
+    font-size: clamp(1.75rem, 5vw, ${({ theme }) => theme.fontSizes.xxl});
   }
 
   h2 {
-    font-size: ${({ theme }) => theme.fontSizes.xl};
+    font-size: clamp(1.25rem, 3.5vw, ${({ theme }) => theme.fontSizes.xl});
   }
 
   h3 {
-    font-size: ${({ theme }) => theme.fontSizes.lg};
+    font-size: clamp(1.125rem, 3vw, ${({ theme }) => theme.fontSizes.lg});
   }
 
   h1, h2, h3, h4, h5, h6 {

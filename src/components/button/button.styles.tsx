@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { SpinnerContainer } from '@/components/spinner/spinner.styles';
 import { focusVisible } from '@/styles/mixins';
+import { media } from '@/styles/theme';
 
 export const BaseButton = styled.button`
   min-width: 165px;
@@ -28,6 +29,11 @@ export const BaseButton = styled.button`
   }
 
   ${focusVisible}
+
+  ${media.mobile} {
+    min-width: 0;
+    width: 100%;
+  }
 `;
 
 export const GoogleSignInButton = styled(BaseButton)`

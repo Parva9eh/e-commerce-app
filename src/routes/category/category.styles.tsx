@@ -42,7 +42,7 @@ export const CategoryContainer = styled.div`
 `;
 
 export const Title = styled.h2`
-  font-size: ${({ theme }) => theme.fontSizes.xxl};
+  font-size: clamp(1.75rem, 5vw, ${({ theme }) => theme.fontSizes.xxl});
   margin-bottom: 25px;
   text-align: center;
 `;

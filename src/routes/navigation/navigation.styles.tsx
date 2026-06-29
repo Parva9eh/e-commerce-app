@@ -18,6 +18,11 @@ export const NavigationContainer = styled.header`
     padding: 10px 0;
     margin-bottom: 20px;
   }
+
+  ${media.mobile} {
+    height: 56px;
+    margin-bottom: 16px;
+  }
 `;
 
 export const LogoContainer = styled(Link)`
@@ -49,6 +54,11 @@ export const NavLinks = styled.div`
   align-items: center;
   justify-content: flex-end;
   gap: 8px;
+  min-width: 0;
+
+  ${media.mobile} {
+    gap: 4px;
+  }
 `;
 
 export const NavLink = styled(Link)`
@@ -58,8 +68,14 @@ export const NavLink = styled(Link)`
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   letter-spacing: ${({ theme }) => theme.letterSpacing.nav};
   text-transform: uppercase;
+  white-space: nowrap;
 
   ${focusVisible}
+
+  ${media.mobile} {
+    padding: 8px 10px;
+    font-size: ${({ theme }) => theme.fontSizes.xs};
+  }
 `;
 
 export const SignOutButton = styled.button`
