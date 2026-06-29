@@ -4,7 +4,12 @@ import { FieldValue } from 'firebase-admin/firestore';
 import { parseCartLineInputs } from '@/lib/api/cart-request';
 import { validateCartFromRequest } from '@/lib/catalog';
 import { getAdminFirestore } from '@/lib/firebase-admin';
-import { enforceRateLimit } from '@/lib/rate-limit';
+import {
+  applyRateLimitHeaders,
+  enforceRateLimit,
+  rateLimitExceededResponse,
+} from '@/lib/rate-limit';
+import { assertOrderUserIdentity, verifyBearerToken } from '@/lib/verify-auth';
 
 type SaveOrderBody = {
   paymentIntentId?: string;
@@ -15,17 +20,12 @@ type SaveOrderBody = {
 
 export async function POST(request: NextRequest) {
   try {
-    const rateLimit = enforceRateLimit(request, 'save-order');
+    const rateLimit = enforceRateLimit(request, 'save-order', 10, 60_000);
 
     if (!rateLimit.ok) {
-      return NextResponse.json(
-        { error: 'Too many order requests. Please try again shortly.' },
-        {
-          status: 429,
-          headers: rateLimit.retryAfterSeconds
-            ? { 'Retry-After': String(rateLimit.retryAfterSeconds) }
-            : undefined,
-        },
+      return rateLimitExceededResponse(
+        'Too many order requests. Please try again shortly.',
+        rateLimit,
       );
     }
 
@@ -43,6 +43,24 @@ export async function POST(request: NextRequest) {
 
     if (!paymentIntentId || typeof paymentIntentId !== 'string') {
       return NextResponse.json({ error: 'Payment intent is required' }, { status: 400 });
+    }
+
+    let verifiedUser = null;
+
+    try {
+      verifiedUser = await verifyBearerToken(request.headers.get('authorization'));
+    } catch {
+      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 });
+    }
+
+    const identityError = assertOrderUserIdentity(
+      verifiedUser,
+      body.userId ?? null,
+      body.userEmail ?? null,
+    );
+
+    if (identityError) {
+      return NextResponse.json({ error: identityError }, { status: 401 });
     }
 
     const cartLines = parseCartLineInputs(body);
@@ -70,7 +88,7 @@ export async function POST(request: NextRequest) {
 
     await db.collection('orders').add({
       userId: body.userId ?? null,
-      userEmail: body.userEmail ?? null,
+      userEmail: body.userEmail ?? verifiedUser?.email ?? null,
       amount: totalDollars,
       amountCents: totalCents,
       items: items.map(({ id, name, price, imageUrl, quantity }) => ({
@@ -84,7 +102,9 @@ export async function POST(request: NextRequest) {
       createdAt: FieldValue.serverTimestamp(),
     });
 
-    return NextResponse.json({ success: true });
+    const response = NextResponse.json({ success: true });
+    applyRateLimitHeaders(response, rateLimit);
+    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to save order';
 

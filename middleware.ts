@@ -1,19 +1,15 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { applySecurityHeaders } from '@/lib/security-headers';
 
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
   const isApiRoute = request.nextUrl.pathname.startsWith('/api/');
 
-  response.headers.set('X-Frame-Options', 'DENY');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
-
-  if (isApiRoute) {
-    response.headers.set('Cache-Control', 'no-store');
-  }
+  applySecurityHeaders(response, {
+    isApiRoute,
+    isProduction: process.env.NODE_ENV === 'production',
+  });
 
   return response;
 }

@@ -10,6 +10,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { StripeCardElementOptions } from '@stripe/stripe-js';
 import { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import { theme } from '@/styles/theme';
+import { getFirebaseUtils } from '@/utils/firebase/firebase-api';
 import { showError, showSuccess } from '@/utils/toast/toast.utils';
 import {
   PaymentFormContainer,
@@ -87,11 +88,22 @@ const PaymentForm = () => {
       }
 
       if (paymentResult.paymentIntent?.status === 'succeeded') {
+        const saveHeaders: Record<string, string> = {
+          'Content-Type': 'application/json',
+        };
+
+        if (currentUser) {
+          const firebaseUtils = await getFirebaseUtils();
+          const idToken = await firebaseUtils.getCurrentUserIdToken();
+
+          if (idToken) {
+            saveHeaders.Authorization = `Bearer ${idToken}`;
+          }
+        }
+
         const saveResponse = await fetch('/api/save-order', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: saveHeaders,
           body: JSON.stringify({
             paymentIntentId: paymentResult.paymentIntent.id,
             userId: currentUser?.id ?? null,

@@ -130,3 +130,13 @@ export const getCurrentUser = (): Promise<User | null> => {
     );
   });
 };
+
+export const getCurrentUserIdToken = async (): Promise<string | null> => {
+  const user = getAuthInstance().currentUser;
+
+  if (!user) {
+    return null;
+  }
+
+  return user.getIdToken();
+};

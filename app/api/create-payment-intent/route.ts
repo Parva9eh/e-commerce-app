@@ -2,21 +2,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { parseCartLineInputs } from '@/lib/api/cart-request';
 import { validateCartFromRequest } from '@/lib/catalog';
-import { enforceRateLimit } from '@/lib/rate-limit';
+import {
+  applyRateLimitHeaders,
+  enforceRateLimit,
+  rateLimitExceededResponse,
+} from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   try {
-    const rateLimit = enforceRateLimit(request, 'create-payment-intent');
+    const rateLimit = enforceRateLimit(request, 'create-payment-intent', 10, 60_000);
 
     if (!rateLimit.ok) {
-      return NextResponse.json(
-        { error: 'Too many payment attempts. Please try again shortly.' },
-        {
-          status: 429,
-          headers: rateLimit.retryAfterSeconds
-            ? { 'Retry-After': String(rateLimit.retryAfterSeconds) }
-            : undefined,
-        },
+      return rateLimitExceededResponse(
+        'Too many payment attempts. Please try again shortly.',
+        rateLimit,
       );
     }
 
@@ -40,7 +39,9 @@ export async function POST(request: NextRequest) {
       payment_method_types: ['card'],
     });
 
-    return NextResponse.json({ clientSecret: paymentIntent.client_secret });
+    const response = NextResponse.json({ clientSecret: paymentIntent.client_secret });
+    applyRateLimitHeaders(response, rateLimit);
+    return response;
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Payment initialization failed';
 
