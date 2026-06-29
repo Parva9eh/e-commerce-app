@@ -17,6 +17,7 @@ const Directory = () => (
         imageUrl={category.imageUrl}
         imageAlt={category.imageAlt}
         href={category.href}
+        priority={category.priority}
       />
     ))}
   </div>

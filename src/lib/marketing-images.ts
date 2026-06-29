@@ -1,3 +1,5 @@
+export const LCP_IMAGE_SRC = '/images/jackets.png';
+
 export const MARKETING_IMAGES = {
   hats: {
     src: '/images/hats.png',

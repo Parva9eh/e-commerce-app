@@ -1,4 +1,4 @@
-import { MARKETING_IMAGES } from '@/lib/marketing-images';
+import { LCP_IMAGE_SRC, MARKETING_IMAGES } from '@/lib/marketing-images';
 
 export type DirectoryCategory = {
   id: number;
@@ -6,6 +6,7 @@ export type DirectoryCategory = {
   imageUrl: string;
   imageAlt: string;
   href: string;
+  priority?: boolean;
 };
 
 export const DIRECTORY_CATEGORIES: DirectoryCategory[] = [
@@ -22,6 +23,7 @@ export const DIRECTORY_CATEGORIES: DirectoryCategory[] = [
     imageUrl: MARKETING_IMAGES.jackets.src,
     imageAlt: MARKETING_IMAGES.jackets.alt,
     href: '/shop/jackets',
+    priority: MARKETING_IMAGES.jackets.src === LCP_IMAGE_SRC,
   },
   {
     id: 3,

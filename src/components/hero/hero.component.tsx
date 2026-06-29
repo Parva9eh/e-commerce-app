@@ -1,8 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
+import { LCP_IMAGE_SRC } from '@/lib/marketing-images';
 import { HERO_CATEGORIES, HERO_FEATURES, HERO_IMAGES } from './hero.constants';
+
+const isLcpImage = (src: string) => src === LCP_IMAGE_SRC;
 import {
   HeroActions,
   HeroCategoryLink,
@@ -33,10 +35,10 @@ const Hero = () => (
           sneakers, and apparel crafted with clean lines and lasting quality.
         </HeroSubtitle>
         <HeroActions>
-          <HeroCta as={Link} href="/shop">
+          <HeroCta href="/shop">
             Shop Collection
           </HeroCta>
-          <HeroCta as={Link} href="/shop/sneakers" $variant="secondary">
+          <HeroCta href="/shop/sneakers" $variant="secondary">
             Explore Sneakers
           </HeroCta>
         </HeroActions>
@@ -51,9 +53,21 @@ const Hero = () => (
         <HeroImageStack>
           {(
             [
-              { variant: 'primary', image: HERO_IMAGES.primary, priority: true },
-              { variant: 'secondary', image: HERO_IMAGES.secondary, priority: false },
-              { variant: 'accent', image: HERO_IMAGES.accent, priority: false },
+              {
+                variant: 'primary',
+                image: HERO_IMAGES.primary,
+                priority: isLcpImage(HERO_IMAGES.primary.src),
+              },
+              {
+                variant: 'secondary',
+                image: HERO_IMAGES.secondary,
+                priority: isLcpImage(HERO_IMAGES.secondary.src),
+              },
+              {
+                variant: 'accent',
+                image: HERO_IMAGES.accent,
+                priority: isLcpImage(HERO_IMAGES.accent.src),
+              },
             ] as const
           ).map(({ variant, image, priority }) => (
             <HeroImageCard key={variant} $variant={variant}>
@@ -78,7 +92,7 @@ const Hero = () => (
 
     <HeroCategoryNav aria-label="Shop by category">
       {HERO_CATEGORIES.map(({ label, href }) => (
-        <HeroCategoryLink key={href} as={Link} href={href}>
+        <HeroCategoryLink key={href} href={href}>
           {label}
         </HeroCategoryLink>
       ))}

@@ -8,15 +8,23 @@ type DirectoryItemProps = {
   imageUrl: string;
   imageAlt: string;
   href: string;
+  priority?: boolean;
 };
 
-const DirectoryItem = ({ title, imageUrl, imageAlt, href }: DirectoryItemProps) => (
+const DirectoryItem = ({
+  title,
+  imageUrl,
+  imageAlt,
+  href,
+  priority = false,
+}: DirectoryItemProps) => (
   <DirectoryItemContainer href={href} aria-label={`Shop ${title}`}>
     <BackgroundImage>
       <Image
         src={imageUrl}
         alt={imageAlt}
         fill
+        priority={priority}
         sizes="(max-width: 800px) 50vw, 30vw"
       />
     </BackgroundImage>

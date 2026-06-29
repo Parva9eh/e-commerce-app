@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 import { focusVisible } from '@/styles/mixins';
 import { media } from '@/styles/theme';
 
@@ -85,7 +86,7 @@ export const HeroActions = styled.div`
   margin-bottom: 28px;
 `;
 
-export const HeroCta = styled.a<{ $variant?: 'primary' | 'secondary' }>`
+export const HeroCta = styled(Link)<{ $variant?: 'primary' | 'secondary' }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -256,7 +257,7 @@ export const HeroCategoryNav = styled.nav`
   }
 `;
 
-export const HeroCategoryLink = styled.a`
+export const HeroCategoryLink = styled(Link)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
