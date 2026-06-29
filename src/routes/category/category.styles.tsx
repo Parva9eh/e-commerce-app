@@ -27,17 +27,19 @@ export const BackLink = styled(Link)`
 
 export const CategoryContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: 20px;
   row-gap: 50px;
 
   ${media.tablet} {
-    grid-template-columns: repeat(2, 1fr);
-    row-gap: 25px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 28px;
   }
 
-  ${media.mobile} {
-    grid-template-columns: 1fr;
+  ${media.narrow} {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 28px;
   }
 `;
 

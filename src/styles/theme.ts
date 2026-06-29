@@ -69,5 +69,6 @@ export type AppTheme = typeof theme;
 
 export const media = {
   tablet: `@media screen and (max-width: ${theme.breakpoints.tablet})`,
+  narrow: '@media screen and (max-width: 640px)',
   mobile: `@media screen and (max-width: ${theme.breakpoints.mobile})`,
 };

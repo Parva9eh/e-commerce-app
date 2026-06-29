@@ -1,7 +1,7 @@
 # Crwn Clothing <img src="public/crwn-192x192.png" width="30" />
 
 A modern, full-stack e-commerce application built as the **capstone project** of the Udemy course  
-[**Complete React Developer (with Redux, Hooks, GraphQL, ContextAPI)**](https://www.udemy.com/share/101WH43@SPjKVsMgyPO1Uz0HoNsVXekhpxGzweLpaNS_qHji2_dLf77YzZOSTHfwiMFkZ4u_Rw==/) by Zero To Mastery.
+[**Complete React Developer (with Redux, Hooks, GraphQL, ContextAPI)**](https://zerotomastery.io/courses/learn-react/) by Zero To Mastery.
 
 This project demonstrates proficiency in modern React development, including state management with Redux, routing with React Router, form handling, and integration with Firebase for authentication and real-time database operations. The app allows users to browse a collection of clothing items, add them to a cart, and manage their shopping experience in a responsive, user-friendly interface.
 
@@ -72,13 +72,13 @@ yarn build:clean && yarn start
 
 Copy `.env.example` to `.env` and fill in your values.
 
-| Variable | Scope | Notes |
-|---|---|---|
-| `NEXT_PUBLIC_FIREBASE_*` | Public | Firebase web client config |
+| Variable                             | Scope  | Notes                                  |
+| ------------------------------------ | ------ | -------------------------------------- |
+| `NEXT_PUBLIC_FIREBASE_*`             | Public | Firebase web client config             |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Public | Stripe publishable key (`pk_test_...`) |
-| `STRIPE_SECRET_KEY` | Server | Stripe secret key (`sk_test_...`) |
-| `FIREBASE_CLIENT_EMAIL` | Server | Firebase Admin service account |
-| `FIREBASE_PRIVATE_KEY` | Server | Firebase Admin private key |
+| `STRIPE_SECRET_KEY`                  | Server | Stripe secret key (`sk_test_...`)      |
+| `FIREBASE_CLIENT_EMAIL`              | Server | Firebase Admin service account         |
+| `FIREBASE_PRIVATE_KEY`               | Server | Firebase Admin private key             |
 
 `NEXT_PUBLIC_` variables are bundled into the browser. Server-only secrets must never use that prefix.
 
@@ -108,6 +108,7 @@ Use Stripe **test mode** keys from [Stripe Dashboard → Developers → API keys
 4. On success you are redirected to `/checkout/success?saved=true`.
 
 Other useful [Stripe test cards](https://docs.stripe.com/testing#cards):
+
 - `4000 0000 0000 0002` — card declined
 - `4000 0000 0000 9995` — insufficient funds
 
@@ -120,17 +121,17 @@ Other useful [Stripe test cards](https://docs.stripe.com/testing#cards):
 
 ## App Routes (`main` branch)
 
-| Route | Description |
-|---|---|
-| `/` | Home / directory |
-| `/shop` | Category previews |
-| `/shop/[category]` | Category product grid |
-| `/shop/[category]/[productId]` | Product detail |
-| `/auth` | Sign in / sign up |
-| `/checkout` | Cart review + Stripe payment |
-| `/checkout/success` | Order confirmation |
-| `/api/create-payment-intent` | Stripe payment intent (API route) |
-| `/api/save-order` | Persist order after payment (API route) |
+| Route                          | Description                             |
+| ------------------------------ | --------------------------------------- |
+| `/`                            | Home / directory                        |
+| `/shop`                        | Category previews                       |
+| `/shop/[category]`             | Category product grid                   |
+| `/shop/[category]/[productId]` | Product detail                          |
+| `/auth`                        | Sign in / sign up                       |
+| `/checkout`                    | Cart review + Stripe payment            |
+| `/checkout/success`            | Order confirmation                      |
+| `/api/create-payment-intent`   | Stripe payment intent (API route)       |
+| `/api/save-order`              | Persist order after payment (API route) |
 
 ## Repository Branches
 
@@ -138,28 +139,28 @@ Other useful [Stripe test cards](https://docs.stripe.com/testing#cards):
 
 These branches track the step-by-step Udemy build:
 
-| Branch | Topic |
-|---|---|
-| `Context-Reducer` | React Context + useReducer |
-| `React-Redux` | Redux fundamentals |
-| `Redux-Thunk` | Async logic with thunks |
-| `Redux-Saga` | Side effects with sagas |
-| `Redux-Toolkit` | Redux Toolkit |
-| `TypeScript` | TypeScript migration |
-| `Serverless-Stripe` | Stripe + Netlify functions |
-| `Context-Graphql` | GraphQL data fetching |
-| `Context-Netlify` | Netlify deployment |
-| `PWA-MediaQueries` | PWA manifest + responsive styles |
-| `Performance-Optimization` | Code splitting & lazy loading |
+| Branch                     | Topic                            |
+| -------------------------- | -------------------------------- |
+| `Context-Reducer`          | React Context + useReducer       |
+| `React-Redux`              | Redux fundamentals               |
+| `Redux-Thunk`              | Async logic with thunks          |
+| `Redux-Saga`               | Side effects with sagas          |
+| `Redux-Toolkit`            | Redux Toolkit                    |
+| `TypeScript`               | TypeScript migration             |
+| `Serverless-Stripe`        | Stripe + Netlify functions       |
+| `Context-Graphql`          | GraphQL data fetching            |
+| `Context-Netlify`          | Netlify deployment               |
+| `PWA-MediaQueries`         | PWA manifest + responsive styles |
+| `Performance-Optimization` | Code splitting & lazy loading    |
 
 ### Post-course snapshots & migrations
 
-| Branch | Description |
-|---|---|
+| Branch                  | Description                                         |
+| ----------------------- | --------------------------------------------------- |
 | `preserve/cra-baseline` | Create React App snapshot + pre-migration bug fixes |
-| `feat/vite-migration` | Phase 1 complete (Vite + Vitest + Netlify) |
-| `feat/nextjs-vercel` | Phase 2 complete (Next.js + Vercel) |
-| `main` | Current production branch (Next.js + Vercel) |
+| `feat/vite-migration`   | Phase 1 complete (Vite + Vitest + Netlify)          |
+| `feat/nextjs-vercel`    | Phase 2 complete (Next.js + Vercel)                 |
+| `main`                  | Current production branch (Next.js + Vercel)        |
 
 ## Post-Course Modernization
 

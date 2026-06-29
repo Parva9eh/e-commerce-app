@@ -31,6 +31,25 @@ for (const viewport of viewports) {
   });
 }
 
+test('shop product previews span the full content width on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto('/shop');
+
+  const layout = await page.evaluate(() => {
+    const preview = document.querySelector('section div');
+    const bodyWidth = document.body.getBoundingClientRect().width;
+    const previewWidth = preview?.getBoundingClientRect().width ?? 0;
+
+    return {
+      bodyWidth,
+      previewWidth,
+      fillsWidth: previewWidth >= bodyWidth - 24,
+    };
+  });
+
+  expect(layout.fillsWidth).toBe(true);
+});
+
 test('home directory uses a single column on very small screens', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 568 });
   await page.goto('/');

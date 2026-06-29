@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import CategoryPreview from '@/components/category-preview/category-preview.component';
 import ShopFilters from '@/routes/shop/shop-filters.component';
+import { ShopEmptyMessage, ShopPage, ShopTitle } from '@/routes/shop/shop.styles';
 import { selectCategoriesMap, selectIsCategoriesLoading } from '@/store/categories/category.selector';
 import { CategoryItem } from '@/store/categories/category.types';
 import ProductCardSkeleton from '@/components/skeleton/product-card-skeleton.component';
@@ -52,7 +53,7 @@ const ShopContent = () => {
     .filter(([, products]) => products.length > 0);
 
   if (!filteredEntries.length) {
-    return <p>No products match your filters.</p>;
+    return <ShopEmptyMessage>No products match your filters.</ShopEmptyMessage>;
   }
 
   return (
@@ -65,7 +66,8 @@ const ShopContent = () => {
 };
 
 const Shop = () => (
-  <>
+  <ShopPage>
+    <ShopTitle>Shop</ShopTitle>
     <Suspense fallback={null}>
       <ShopFilters />
     </Suspense>
@@ -80,7 +82,7 @@ const Shop = () => (
     >
       <ShopContent />
     </Suspense>
-  </>
+  </ShopPage>
 );
 
 export default Shop;

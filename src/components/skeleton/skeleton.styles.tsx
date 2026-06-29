@@ -22,14 +22,16 @@ export const SkeletonBlock = styled.div<{ $height?: string }>`
 
 export const SkeletonGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
 
   ${media.tablet} {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
   }
 
-  ${media.mobile} {
-    grid-template-columns: 1fr;
+  ${media.narrow} {
+    grid-template-columns: minmax(0, 1fr);
   }
 `;

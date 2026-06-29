@@ -9,7 +9,14 @@ import {
   setPreSearchPath,
   updateShopParam,
 } from '@/utils/shop/shop-params';
-import { FiltersContainer, FilterGroup, FilterSelect, MobileSearchInput } from './shop-filters.styles';
+import {
+  FiltersContainer,
+  FilterGroup,
+  FilterSelect,
+  MobileSearchForm,
+  MobileSearchInput,
+  ShopToolbar,
+} from './shop-filters.styles';
 
 const ShopFilters = () => {
   const router = useRouter();
@@ -92,8 +99,8 @@ const ShopFilters = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleMobileSearch}>
+    <ShopToolbar>
+      <MobileSearchForm onSubmit={handleMobileSearch}>
         <MobileSearchInput
           ref={inputRef}
           name="mobile-search"
@@ -103,7 +110,7 @@ const ShopFilters = () => {
           onChange={handleMobileChange}
           aria-label="Search products"
         />
-      </form>
+      </MobileSearchForm>
       <FiltersContainer>
         <FilterGroup>
           Category
@@ -133,7 +140,7 @@ const ShopFilters = () => {
           </FilterSelect>
         </FilterGroup>
       </FiltersContainer>
-    </>
+    </ShopToolbar>
   );
 };
 
