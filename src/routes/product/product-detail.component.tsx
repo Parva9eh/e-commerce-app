@@ -1,17 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
 import ProductImage from '@/components/product-image/product-image.component';
 import { addItemToCart } from '@/store/cart/cart.action';
 import { CategoryItem } from '@/store/categories/category.types';
 import { formatPrice } from '@/utils/format/format-price';
-import {
-  resolveProductBackLinks,
-  type ProductBackLink,
-} from '@/utils/shop/product-navigation';
-import { getBrowseOrigin } from '@/utils/shop/browse-origin';
+import { resolveProductBackLink } from '@/utils/shop/browse-navigation';
 import { showSuccess } from '@/utils/toast/toast.utils';
 import {
   ProductDetailContainer,
@@ -29,17 +24,10 @@ type ProductDetailProps = {
   category: string;
 };
 
-const getDefaultBackLinks = (category: string): ProductBackLink[] =>
-  resolveProductBackLinks(null, category);
-
 const ProductDetail = ({ product, category }: ProductDetailProps) => {
   const dispatch = useDispatch();
   const { name, price, imageUrl } = product;
-  const [backLinks, setBackLinks] = useState(() => getDefaultBackLinks(category));
-
-  useEffect(() => {
-    setBackLinks(resolveProductBackLinks(getBrowseOrigin(), category));
-  }, [category]);
+  const backLink = resolveProductBackLink(category);
 
   const handleAddToCart = () => {
     dispatch(addItemToCart(product));
@@ -49,11 +37,7 @@ const ProductDetail = ({ product, category }: ProductDetailProps) => {
   return (
     <>
       <BackNav aria-label="Product navigation">
-        {backLinks.map((link, index) => (
-          <BackLink key={`${link.href}-${index}`} href={link.href}>
-            &larr; {link.label}
-          </BackLink>
-        ))}
+        <BackLink href={backLink.href}>&larr; {backLink.label}</BackLink>
       </BackNav>
       <ProductDetailContainer>
         <ImageColumn>
