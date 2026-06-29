@@ -7,7 +7,15 @@ const viewports = [
   { name: 'desktop', width: 1280, height: 800 },
 ] as const;
 
-const routes = ['/', '/shop', '/shop/hats', '/shop/hats/1', '/auth', '/checkout'] as const;
+const routes = [
+  '/',
+  '/shop',
+  '/shop/hats',
+  '/shop/hats/1',
+  '/auth',
+  '/checkout',
+  '/checkout/success',
+] as const;
 
 for (const viewport of viewports) {
   test.describe(`responsive layout (${viewport.name})`, () => {

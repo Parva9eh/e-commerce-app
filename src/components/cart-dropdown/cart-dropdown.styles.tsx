@@ -14,7 +14,7 @@ export const CartDropdownContainer = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.dropdown};
   top: calc(100% + 12px);
   right: 0;
-  z-index: 5;
+  z-index: ${({ theme }) => theme.zIndex.dropdown + 1};
 
   ${BaseButton},
   ${GoogleSignInButton},
@@ -28,6 +28,16 @@ export const CartDropdownContainer = styled.div`
     right: 10px;
     width: auto;
     top: 72px;
+    height: auto;
+    max-height: calc(100vh - 88px);
+  }
+
+  ${media.narrow} {
+    left: 8px;
+    right: 8px;
+    top: 64px;
+    padding: 16px;
+    max-height: calc(100vh - 80px);
   }
 `;
 
@@ -42,4 +52,11 @@ export const CartItems = styled.div`
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+
+  ${media.tablet} {
+    height: auto;
+    max-height: calc(100vh - 220px);
+  }
 `;

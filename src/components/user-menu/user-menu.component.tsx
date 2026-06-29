@@ -1,6 +1,7 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { CurrentUser } from '@/store/user/user.types';
 import { signOutStart } from '@/store/user/user.action';
@@ -24,11 +25,18 @@ type UserMenuProps = {
 
 const UserMenu = ({ currentUser }: UserMenuProps) => {
   const dispatch = useDispatch();
+  const pathname = usePathname();
   const menuRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const userLabel = getUserLabel(currentUser);
 
-  useOnClickOutside(menuRef, () => setIsOpen(false));
+  const closeMenu = () => setIsOpen(false);
+
+  useOnClickOutside(menuRef, closeMenu, isOpen);
+
+  useEffect(() => {
+    closeMenu();
+  }, [pathname]);
 
   const handleSignOut = () => {
     setIsOpen(false);

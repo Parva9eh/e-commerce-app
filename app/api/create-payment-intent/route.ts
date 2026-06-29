@@ -45,8 +45,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Payment initialization failed';
 
-    console.error('Create payment intent failed:', error);
-
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }

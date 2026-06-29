@@ -95,4 +95,16 @@ export const SignOutButton = styled.button`
 
 export const CartActionsContainer = styled.div`
   position: relative;
+  z-index: ${({ theme }) => theme.zIndex.dropdown + 1};
+`;
+
+export const CartBackdrop = styled.button`
+  position: fixed;
+  inset: 0;
+  z-index: ${({ theme }) => theme.zIndex.dropdown};
+  border: none;
+  padding: 0;
+  margin: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  cursor: pointer;
 `;

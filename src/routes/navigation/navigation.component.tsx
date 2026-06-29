@@ -1,7 +1,8 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useOnClickOutside } from '@/hooks/use-on-click-outside';
 import {
@@ -10,6 +11,7 @@ import {
   NavLinks,
   NavLink,
   CartActionsContainer,
+  CartBackdrop,
 } from './navigation.styles';
 import CartIcon from '@/components/cart-icon/cart-icon.component';
 import { ReactComponent as CrwnLogo } from '@/assets/crown.svg';
@@ -34,10 +36,18 @@ const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
   const dispatch = useDispatch();
+  const pathname = usePathname();
   const cartRef = useRef<HTMLDivElement>(null);
-  useOnClickOutside(cartRef, () => {
-    if (isCartOpen) dispatch(setIsCartOpen(false));
-  });
+
+  const closeCart = useCallback(() => {
+    dispatch(setIsCartOpen(false));
+  }, [dispatch]);
+
+  useOnClickOutside(cartRef, closeCart, isCartOpen);
+
+  useEffect(() => {
+    closeCart();
+  }, [pathname, closeCart]);
 
   return (
     <NavigationContainer>
@@ -57,6 +67,13 @@ const Navigation = () => {
           {isCartOpen && <CartDropdown />}
         </CartActionsContainer>
       </NavLinks>
+      {isCartOpen && (
+        <CartBackdrop
+          type="button"
+          aria-label="Close cart"
+          onClick={closeCart}
+        />
+      )}
     </NavigationContainer>
   );
 };

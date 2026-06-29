@@ -17,6 +17,11 @@ export const CheckoutItemContainer = styled.div`
     gap: 12px;
     padding: 20px 0;
   }
+
+  ${media.narrow} {
+    gap: 10px;
+    padding: 16px 0;
+  }
 `;
 
 export const ImageContainer = styled.div`
@@ -43,6 +48,11 @@ export const BaseSpan = styled.span`
 export const Quantity = styled(BaseSpan)`
   display: flex;
   align-items: center;
+
+  ${media.tablet} {
+    width: 100%;
+    justify-content: flex-start;
+  }
 `;
 
 export const QuantityButton = styled.button`

@@ -9,8 +9,8 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
 
   try {
     categories = await getCategories();
-  } catch (error) {
-    console.error('Failed to prefetch shop categories:', error);
+  } catch {
+    categories = [];
   }
 
   return (

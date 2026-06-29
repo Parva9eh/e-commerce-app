@@ -16,9 +16,11 @@ export const FormContainer = styled.form`
   max-width: 500px;
   min-height: 100px;
   padding: 0 10px;
+  align-self: center;
 
   ${media.tablet} {
     max-width: 100%;
+    padding: 0;
   }
 `;
 

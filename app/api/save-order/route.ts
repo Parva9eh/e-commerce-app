@@ -108,8 +108,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to save order';
 
-    console.error('Save order failed:', error);
-
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
