@@ -45,13 +45,23 @@ export const ProductDescription = styled.p`
 export const BackNav = styled.nav`
   display: flex;
   flex-wrap: wrap;
-  gap: 12px 20px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 8px 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
 `;
 
 export const BackLink = styled(Link)`
   font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
   text-transform: uppercase;
   letter-spacing: ${({ theme }) => theme.letterSpacing.nav};
+  color: ${({ theme }) => theme.colors.textMuted};
   display: inline-block;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.text};
+  }
 `;

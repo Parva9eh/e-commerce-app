@@ -10,6 +10,7 @@ import { GlobalStyle } from '@/global.styles';
 import { theme } from '@/styles/theme';
 import AppInitializer from './app-initializer';
 import AuthSessionFeedback from './auth-session-feedback';
+import BrowseOriginTracker from './browse-origin-tracker';
 
 type ProvidersProps = {
   children: React.ReactNode;
@@ -30,6 +31,7 @@ export default function Providers({ children }: ProvidersProps) {
             }}
           />
           <AppInitializer />
+          <BrowseOriginTracker />
           <AuthSessionFeedback />
           {children}
         </ThemeProvider>

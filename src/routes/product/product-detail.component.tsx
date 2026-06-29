@@ -11,7 +11,7 @@ import {
   resolveProductBackLinks,
   type ProductBackLink,
 } from '@/utils/shop/product-navigation';
-import { getProductReferrerPath } from '@/utils/shop/shop-params';
+import { getBrowseOrigin } from '@/utils/shop/browse-origin';
 import { showSuccess } from '@/utils/toast/toast.utils';
 import {
   ProductDetailContainer,
@@ -38,7 +38,7 @@ const ProductDetail = ({ product, category }: ProductDetailProps) => {
   const [backLinks, setBackLinks] = useState(() => getDefaultBackLinks(category));
 
   useEffect(() => {
-    setBackLinks(resolveProductBackLinks(getProductReferrerPath(), category));
+    setBackLinks(resolveProductBackLinks(getBrowseOrigin(), category));
   }, [category]);
 
   const handleAddToCart = () => {
@@ -49,8 +49,8 @@ const ProductDetail = ({ product, category }: ProductDetailProps) => {
   return (
     <>
       <BackNav aria-label="Product navigation">
-        {backLinks.map((link) => (
-          <BackLink key={link.href} href={link.href}>
+        {backLinks.map((link, index) => (
+          <BackLink key={`${link.href}-${index}`} href={link.href}>
             &larr; {link.label}
           </BackLink>
         ))}

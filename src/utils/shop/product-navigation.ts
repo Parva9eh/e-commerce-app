@@ -1,10 +1,12 @@
+import type { BrowseOrigin } from '@/utils/shop/browse-origin';
+
 export type ProductBackLink = {
   href: string;
   label: string;
 };
 
 export const resolveProductBackLinks = (
-  referrerPath: string | null,
+  browseOrigin: BrowseOrigin | null,
   category: string,
 ): ProductBackLink[] => {
   const categoryHref = `/shop/${category}`;
@@ -13,26 +15,20 @@ export const resolveProductBackLinks = (
     label: `Back to ${category}`,
   };
 
-  if (!referrerPath) {
+  if (!browseOrigin) {
     return [categoryLink];
   }
 
-  const [pathname] = referrerPath.split('?');
-
-  if (pathname === categoryHref) {
-    return [categoryLink];
-  }
-
-  if (pathname === '/') {
+  if (browseOrigin.label === 'Home') {
     return [
       { href: '/', label: 'Back to Home' },
       categoryLink,
     ];
   }
 
-  if (pathname === '/shop') {
+  if (browseOrigin.label === 'Shop') {
     return [
-      { href: referrerPath, label: 'Back to Shop' },
+      { href: browseOrigin.href, label: 'Back to Shop' },
       categoryLink,
     ];
   }
