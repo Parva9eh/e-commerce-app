@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Script from 'next/script';
 import { openSansCondensed, openSansCondensedBold } from '@/lib/fonts';
 import { SUPPRESS_FAST_REFRESH_LOGS_SCRIPT } from '@/lib/dev/suppress-fast-refresh-logs';
 import Providers from '@/providers/providers';
@@ -23,11 +22,14 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" className={openSansCondensed.variable}>
-      {process.env.NODE_ENV === 'development' && (
-        <Script id="suppress-fast-refresh-logs" strategy="beforeInteractive">
-          {SUPPRESS_FAST_REFRESH_LOGS_SCRIPT}
-        </Script>
-      )}
+      <head>
+        {process.env.NODE_ENV === 'development' && (
+          <script
+            id="suppress-fast-refresh-logs"
+            dangerouslySetInnerHTML={{ __html: SUPPRESS_FAST_REFRESH_LOGS_SCRIPT }}
+          />
+        )}
+      </head>
       <body className={openSansCondensed.className}>
         <Providers>
           <Navigation />

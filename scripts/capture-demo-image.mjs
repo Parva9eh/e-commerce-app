@@ -8,8 +8,9 @@ const rootDir = path.resolve(__dirname, '..');
 const outputDir = path.join(rootDir, 'public');
 const demoUrl = 'https://e-commerce-crwn-clothing.vercel.app';
 
-const desktopViewport = { width: 1280, height: 800 };
-const mobileViewport = { width: 390, height: 844 };
+const desktopScreen = { width: 960, height: 600 };
+const mobileCapture = { width: 390, height: 844 };
+const mobileScreen = { width: 280, height: 606 };
 
 async function captureViewportScreenshot(page, viewport, fileName) {
   await page.setViewportSize(viewport);
@@ -63,50 +64,54 @@ async function buildComposite(desktopPath, mobilePath) {
         color: #5a5a5a;
       }
       .laptop-shell {
-        padding: 14px 14px 22px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 14px 14px 18px;
         border-radius: 18px;
         background: #1a1a1a;
         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
       }
       .laptop-screen {
-        width: 960px;
-        height: 600px;
+        width: ${desktopScreen.width}px;
+        height: ${desktopScreen.height}px;
         border-radius: 8px;
         overflow: hidden;
-        background: #fff;
+        background: #1a1a1a;
+        line-height: 0;
       }
       .laptop-screen img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        object-position: top;
         display: block;
       }
       .laptop-base {
-        width: 1040px;
+        width: 108%;
         height: 14px;
-        margin: 10px auto 0;
+        margin-top: 10px;
         border-radius: 0 0 12px 12px;
         background: #2d2d2d;
       }
       .phone-shell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         padding: 14px 10px;
         border-radius: 34px;
         background: #1a1a1a;
         box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
       }
       .phone-screen {
-        width: 280px;
-        height: 606px;
+        width: ${mobileScreen.width}px;
+        height: ${mobileScreen.height}px;
         border-radius: 24px;
         overflow: hidden;
-        background: #fff;
+        background: #1a1a1a;
+        line-height: 0;
       }
       .phone-screen img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        object-position: top;
         display: block;
       }
     </style>
@@ -139,8 +144,8 @@ async function main() {
   const browser = await chromium.launch();
   const page = await browser.newPage();
 
-  const desktopPath = await captureViewportScreenshot(page, desktopViewport, 'demo-desktop-temp.png');
-  const mobilePath = await captureViewportScreenshot(page, mobileViewport, 'demo-mobile-temp.png');
+  const desktopPath = await captureViewportScreenshot(page, desktopScreen, 'demo-desktop-temp.png');
+  const mobilePath = await captureViewportScreenshot(page, mobileCapture, 'demo-mobile-temp.png');
 
   const compositeHtml = await buildComposite(desktopPath, mobilePath);
   const compositeHtmlPath = path.join(outputDir, 'demo-composite-temp.html');
