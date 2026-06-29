@@ -33,6 +33,10 @@ export const setBrowseOrigin = (origin: BrowseOrigin): void => {
   sessionStorage.setItem(BROWSE_ORIGIN_KEY, JSON.stringify(origin));
 };
 
+export const rememberHomeBrowseOrigin = (): void => {
+  setBrowseOrigin({ href: '/', label: 'Home' });
+};
+
 export const trackBrowseOrigin = (
   pathname: string,
   searchParams: URLSearchParams,

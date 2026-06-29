@@ -37,7 +37,9 @@ const ProductDetail = ({ product, category }: ProductDetailProps) => {
   return (
     <>
       <BackNav aria-label="Product navigation">
-        <BackLink href={backLink.href}>&larr; {backLink.label}</BackLink>
+        <BackLink href={backLink.href} aria-label={backLink.ariaLabel}>
+          &larr; {backLink.label}
+        </BackLink>
       </BackNav>
       <ProductDetailContainer>
         <ImageColumn>

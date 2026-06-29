@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { rememberHomeBrowseOrigin } from '@/utils/shop/browse-origin';
 import { DirectoryItemContainer, BackgroundImage, Body } from './directory-item.styles';
 
 type DirectoryItemProps = {
@@ -18,7 +19,11 @@ const DirectoryItem = ({
   href,
   priority = false,
 }: DirectoryItemProps) => (
-  <DirectoryItemContainer href={href} aria-label={`Shop ${title}`}>
+  <DirectoryItemContainer
+    href={href}
+    aria-label={`Shop ${title}`}
+    onClick={rememberHomeBrowseOrigin}
+  >
     <BackgroundImage>
       <Image
         src={imageUrl}

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, test } from 'vitest';
 import {
   BROWSE_ORIGIN_KEY,
   getBrowseOrigin,
+  rememberHomeBrowseOrigin,
   setBrowseOrigin,
   trackBrowseOrigin,
 } from '@/utils/shop/browse-origin';
@@ -24,6 +25,12 @@ describe('browse origin utils', () => {
       href: '/shop?search=hat&category=hats',
       label: 'Shop',
     });
+  });
+
+  test('rememberHomeBrowseOrigin stores home before navigating to a category', () => {
+    rememberHomeBrowseOrigin();
+
+    expect(getBrowseOrigin()).toEqual({ href: '/', label: 'Home' });
   });
 
   test('trackBrowseOrigin does not overwrite home when visiting a category page', () => {

@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { LCP_IMAGE_SRC } from '@/lib/marketing-images';
+import { rememberHomeBrowseOrigin } from '@/utils/shop/browse-origin';
 import { HERO_CATEGORIES, HERO_FEATURES, HERO_IMAGES } from './hero.constants';
 
 const isLcpImage = (src: string) => src === LCP_IMAGE_SRC;
@@ -38,7 +39,11 @@ const Hero = () => (
           <HeroCta href="/shop">
             Shop Collection
           </HeroCta>
-          <HeroCta href="/shop/sneakers" $variant="secondary">
+          <HeroCta
+            href="/shop/sneakers"
+            $variant="secondary"
+            onClick={rememberHomeBrowseOrigin}
+          >
             Explore Sneakers
           </HeroCta>
         </HeroActions>
@@ -92,7 +97,7 @@ const Hero = () => (
 
     <HeroCategoryNav aria-label="Shop by category">
       {HERO_CATEGORIES.map(({ label, href }) => (
-        <HeroCategoryLink key={href} href={href}>
+        <HeroCategoryLink key={href} href={href} onClick={rememberHomeBrowseOrigin}>
           {label}
         </HeroCategoryLink>
       ))}

@@ -1,21 +1,24 @@
 import { describe, expect, test } from 'vitest';
 import {
+  BACK_LINK_LABEL,
   resolveCategoryBackLink,
   resolveProductBackLink,
 } from '@/utils/shop/browse-navigation';
 
 describe('browse navigation utils', () => {
-  test('resolveProductBackLink returns only the category link', () => {
+  test('resolveProductBackLink returns the category href with a Back label', () => {
     expect(resolveProductBackLink('hats')).toEqual({
       href: '/shop/hats',
-      label: 'Back to hats',
+      label: BACK_LINK_LABEL,
+      ariaLabel: 'Back to hats',
     });
   });
 
   test('resolveCategoryBackLink returns home when browsing started on home', () => {
     expect(resolveCategoryBackLink({ href: '/', label: 'Home' })).toEqual({
       href: '/',
-      label: 'Back to Home',
+      label: BACK_LINK_LABEL,
+      ariaLabel: 'Back to Home',
     });
   });
 
@@ -27,7 +30,8 @@ describe('browse navigation utils', () => {
       }),
     ).toEqual({
       href: '/shop?search=beanie&category=hats',
-      label: 'Back to Shop',
+      label: BACK_LINK_LABEL,
+      ariaLabel: 'Back to Shop',
     });
   });
 
