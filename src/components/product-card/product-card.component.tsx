@@ -3,6 +3,10 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { ProductCardContainer, Footer, Name, Price, ProductLink } from './product-card.styles';
+import {
+  buildCurrentPath,
+  setProductReferrerPath,
+} from '@/utils/shop/shop-params';
 import ProductImage from '@/components/product-image/product-image.component';
 import { useDispatch } from 'react-redux';
 import Button, { BUTTON_TYPE_CLASSES } from '@/components/button/button.component';
@@ -25,10 +29,23 @@ const ProductCard: FC<ProductCardProps> = ({ product, category }) => {
   };
   const productHref = category ? `/shop/${category}/${id}` : undefined;
 
+  const rememberReferrer = () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    setProductReferrerPath(
+      buildCurrentPath(
+        window.location.pathname,
+        new URLSearchParams(window.location.search),
+      ),
+    );
+  };
+
   return (
     <ProductCardContainer>
       {productHref ? (
-        <ProductLink href={productHref}>
+        <ProductLink href={productHref} onClick={rememberReferrer}>
           <ProductImage src={imageUrl} alt={name} />
         </ProductLink>
       ) : (
@@ -36,7 +53,7 @@ const ProductCard: FC<ProductCardProps> = ({ product, category }) => {
       )}
       <Footer>
         {productHref ? (
-          <Name as={Link} href={productHref}>
+          <Name as={Link} href={productHref} onClick={rememberReferrer}>
             {name}
           </Name>
         ) : (

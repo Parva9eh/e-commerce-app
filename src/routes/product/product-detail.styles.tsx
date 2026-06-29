@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Link from 'next/link';
 import { media } from '@/styles/theme';
 
 export const ProductDetailContainer = styled.div`
@@ -41,10 +42,16 @@ export const ProductDescription = styled.p`
   margin: 0;
 `;
 
-export const BackLink = styled.a`
+export const BackNav = styled.nav`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 20px;
+`;
+
+export const BackLink = styled(Link)`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   text-transform: uppercase;
   letter-spacing: ${({ theme }) => theme.letterSpacing.nav};
-  margin-bottom: 20px;
   display: inline-block;
 `;

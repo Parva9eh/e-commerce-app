@@ -6,6 +6,7 @@ const SHOP_PARAM_DEFAULTS: Partial<Record<ShopParamKey, string>> = {
 };
 
 export const PRE_SEARCH_PATH_KEY = 'pre-search-path';
+export const PRODUCT_REFERRER_PATH_KEY = 'product-referrer-path';
 
 export const buildCurrentPath = (pathname: string, searchParams: URLSearchParams): string => {
   const query = searchParams.toString();
@@ -26,6 +27,22 @@ export const setPreSearchPath = (path: string): void => {
   }
 
   sessionStorage.setItem(PRE_SEARCH_PATH_KEY, path);
+};
+
+export const getProductReferrerPath = (): string | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  return sessionStorage.getItem(PRODUCT_REFERRER_PATH_KEY);
+};
+
+export const setProductReferrerPath = (path: string): void => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  sessionStorage.setItem(PRODUCT_REFERRER_PATH_KEY, path);
 };
 
 export const buildShopPath = (params: URLSearchParams): string => {
