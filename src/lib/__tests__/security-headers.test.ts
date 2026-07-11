@@ -14,6 +14,7 @@ describe('security headers', () => {
     expect(policy).toContain('https://api.stripe.com');
     expect(policy).toContain('https://identitytoolkit.googleapis.com');
     expect(policy).toContain("frame-ancestors 'none'");
+    expect(policy).toContain("script-src-attr 'none'");
     expect(policy).toContain('upgrade-insecure-requests');
   });
 });

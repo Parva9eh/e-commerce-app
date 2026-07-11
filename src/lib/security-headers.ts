@@ -15,6 +15,11 @@ const FIREBASE_CONNECT_SOURCES = [
 
 const FIREBASE_FRAME_SOURCES = ['https://accounts.google.com', 'https://*.firebaseapp.com'];
 
+/**
+ * Production CSP.
+ * Note: Next.js + styled-components still require 'unsafe-inline' for scripts/styles
+ * without a full nonce pipeline. We harden with script-src-attr 'none' and tight host allowlists.
+ */
 export const buildContentSecurityPolicy = (isProduction: boolean): string | null => {
   if (!isProduction) {
     return null;
@@ -27,6 +32,7 @@ export const buildContentSecurityPolicy = (isProduction: boolean): string | null
       ...STRIPE_SCRIPT_SOURCES,
       'https://apis.google.com',
     ].join(' '),
+    "script-src-attr 'none'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://i.ibb.co",
     "font-src 'self' data:",
