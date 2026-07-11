@@ -35,6 +35,29 @@ const CARD_ELEMENT_OPTIONS: StripeCardElementOptions = {
   },
 };
 
+const PENDING_ORDER_KEY = 'pending-order-confirmation';
+
+type PendingOrder = {
+  paymentIntentId: string;
+  items: Array<{ id: number; quantity: number }>;
+};
+
+const storePendingOrder = (pending: PendingOrder) => {
+  try {
+    sessionStorage.setItem(PENDING_ORDER_KEY, JSON.stringify(pending));
+  } catch {
+    // sessionStorage may be unavailable; ignore
+  }
+};
+
+const clearPendingOrder = () => {
+  try {
+    sessionStorage.removeItem(PENDING_ORDER_KEY);
+  } catch {
+    // ignore
+  }
+};
+
 const PaymentForm = () => {
   const stripe = useStripe();
   const elements = useElements();
@@ -51,13 +74,16 @@ const PaymentForm = () => {
     setIsProcessingPayment(true);
 
     try {
+      const cartPayload = cartItems.map(({ id, quantity }) => ({ id, quantity }));
+
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          items: cartItems.map(({ id, quantity }) => ({ id, quantity })),
+          items: cartPayload,
+          ...(currentUser?.email ? { receiptEmail: currentUser.email } : {}),
         }),
       });
 
@@ -78,6 +104,7 @@ const PaymentForm = () => {
           card: cardDetails,
           billing_details: {
             name: currentUser ? currentUser.displayName : 'Guest',
+            email: currentUser?.email || undefined,
           },
         },
       });
@@ -88,6 +115,7 @@ const PaymentForm = () => {
       }
 
       if (paymentResult.paymentIntent?.status === 'succeeded') {
+        const paymentIntentId = paymentResult.paymentIntent.id;
         const saveHeaders: Record<string, string> = {
           'Content-Type': 'application/json',
         };
@@ -105,23 +133,23 @@ const PaymentForm = () => {
           method: 'POST',
           headers: saveHeaders,
           body: JSON.stringify({
-            paymentIntentId: paymentResult.paymentIntent.id,
+            paymentIntentId,
             userId: currentUser?.id ?? null,
-            userEmail: currentUser?.email ?? null,
-            items: cartItems.map(({ id, quantity }) => ({ id, quantity })),
+            items: cartPayload,
           }),
         });
 
-        const orderSaved = saveResponse.ok;
-        dispatch(clearCart());
-
-        if (orderSaved) {
+        if (saveResponse.ok) {
+          clearPendingOrder();
+          dispatch(clearCart());
           showSuccess('Payment successful');
           router.push('/checkout/success?saved=true');
           return;
         }
 
-        showError('Payment succeeded, but we could not save your order confirmation.');
+        // Payment succeeded but order save failed — keep cart and stash PI for recovery.
+        storePendingOrder({ paymentIntentId, items: cartPayload });
+        showError('Payment succeeded, but we could not save your order confirmation. Your cart was kept.');
         router.push('/checkout/success?saved=false');
       }
     } catch {
