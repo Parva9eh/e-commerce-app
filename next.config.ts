@@ -1,7 +1,6 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  serverExternalPackages: ['firebase-admin', '@grpc/grpc-js', '@grpc/proto-loader'],
   images: {
     remotePatterns: [
       {

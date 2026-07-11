@@ -11,8 +11,7 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // Orders are written only by the Admin SDK (server payment APIs).
-    // Clients may read their own orders; all client writes are denied.
+    // Orders: server writes only (service account). Clients may read their own.
     match /orders/{orderId} {
       allow read: if request.auth != null && resource.data.userId == request.auth.uid;
       allow create, update, delete: if false;
