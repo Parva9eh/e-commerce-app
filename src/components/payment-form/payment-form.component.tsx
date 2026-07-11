@@ -139,28 +139,32 @@ const PaymentForm = () => {
           }),
         });
 
-        let saveErrorMessage = 'Payment succeeded, but we could not save your order confirmation. Your cart was kept.';
+        let saveData: { error?: string; success?: boolean; persistence?: string } = {};
 
         try {
-          const saveData = (await saveResponse.json()) as { error?: string };
-          if (saveData.error) {
-            saveErrorMessage = `Payment succeeded, but order save failed: ${saveData.error}`;
-          }
+          saveData = (await saveResponse.json()) as typeof saveData;
         } catch {
           // non-JSON (e.g. platform HTML 500)
         }
 
-        if (saveResponse.ok) {
+        if (saveResponse.ok && saveData.success !== false) {
           clearPendingOrder();
           dispatch(clearCart());
           showSuccess('Payment successful');
-          router.push('/checkout/success?saved=true');
+          router.push(
+            saveData.persistence === 'stripe'
+              ? '/checkout/success?saved=true&store=stripe'
+              : '/checkout/success?saved=true',
+          );
           return;
         }
 
-        // Payment succeeded but order save failed — keep cart and stash PI for recovery.
         storePendingOrder({ paymentIntentId, items: cartPayload });
-        showError(saveErrorMessage);
+        showError(
+          saveData.error
+            ? `Payment succeeded, but order save failed: ${saveData.error}`
+            : 'Payment succeeded, but we could not save your order confirmation.',
+        );
         router.push('/checkout/success?saved=false');
       }
     } catch {

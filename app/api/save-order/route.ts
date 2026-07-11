@@ -29,6 +29,8 @@ type SaveOrderBody = {
   items?: Array<{ id?: unknown; quantity?: unknown }>;
 };
 
+type OrderPersistence = 'firestore' | 'stripe';
+
 export async function POST(request: NextRequest) {
   try {
     const rateLimit = await enforceRateLimit(request, 'save-order', 10, 60_000);
@@ -44,14 +46,6 @@ export async function POST(request: NextRequest) {
 
     if (!stripeSecretKey) {
       console.error('[api:config] STRIPE_SECRET_KEY is missing');
-      return NextResponse.json(
-        { error: 'Payment service is not configured' },
-        { status: 500 },
-      );
-    }
-
-    if (!hasAdminCredentials()) {
-      console.error('[api:config] Firebase Admin credentials are missing');
       return NextResponse.json(
         { error: 'Payment service is not configured' },
         { status: 500 },
@@ -115,9 +109,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cart does not match payment' }, { status: 400 });
     }
 
-    const result = await createOrderDocument(paymentIntentId, {
-      userId: verifiedUser?.uid ?? null,
-      userEmail: resolveOrderEmail(verifiedUser, paymentIntent.receipt_email),
+    const orderEmail = resolveOrderEmail(verifiedUser, paymentIntent.receipt_email);
+    const orderUserId = verifiedUser?.uid ?? null;
+    const orderPayload = {
+      userId: orderUserId,
+      userEmail: orderEmail,
       amount: totalDollars,
       amountCents: totalCents,
       items: items.map(({ id, name, price, imageUrl, quantity }) => ({
@@ -129,11 +125,46 @@ export async function POST(request: NextRequest) {
       })),
       paymentIntentId,
       cartFingerprint: fingerprint,
-    });
+    };
+
+    let persistence: OrderPersistence = 'stripe';
+    let duplicate = false;
+
+    if (hasAdminCredentials()) {
+      try {
+        const result = await createOrderDocument(paymentIntentId, orderPayload);
+        persistence = 'firestore';
+        duplicate = result.duplicate;
+      } catch (error) {
+        console.error('[api] order write failed', error instanceof Error ? error.message : error);
+      }
+    }
+
+    // Fallback confirmation on the PaymentIntent when Firestore is unavailable.
+    if (persistence === 'stripe') {
+      const itemSummary = items
+        .map((item) => `${item.id}x${item.quantity}`)
+        .join(',')
+        .slice(0, 450);
+
+      await stripe.paymentIntents.update(paymentIntentId, {
+        metadata: {
+          ...paymentIntent.metadata,
+          [CART_FINGERPRINT_METADATA_KEY]: fingerprint,
+          order_confirmed: 'true',
+          order_total_cents: String(totalCents),
+          order_item_count: String(items.length),
+          order_items: itemSummary,
+          order_user_id: orderUserId ?? 'guest',
+          order_email: (orderEmail ?? '').slice(0, 450),
+        },
+      });
+    }
 
     const response = NextResponse.json({
       success: true,
-      ...(result.duplicate ? { duplicate: true } : {}),
+      persistence,
+      ...(duplicate ? { duplicate: true } : {}),
     });
     applyRateLimitHeaders(response, rateLimit);
     return response;
