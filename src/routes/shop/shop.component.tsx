@@ -2,19 +2,17 @@
 
 import { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { useSelector } from 'react-redux';
 import CategoryPreview from '@/components/category-preview/category-preview.component';
 import ShopFilters from '@/routes/shop/shop-filters.component';
 import { ShopEmptyMessage, ShopPage, ShopTitle } from '@/routes/shop/shop.styles';
-import { selectCategoriesMap, selectIsCategoriesLoading } from '@/store/categories/category.selector';
 import { CategoryItem } from '@/store/categories/category.types';
 import ProductCardSkeleton from '@/components/skeleton/product-card-skeleton.component';
 import { SkeletonGrid } from '@/components/skeleton/skeleton.styles';
+import { useShopCategories } from '@/providers/shop-categories-provider';
 
 const ShopContent = () => {
   const searchParams = useSearchParams();
-  const categoriesMap = useSelector(selectCategoriesMap);
-  const isLoading = useSelector(selectIsCategoriesLoading);
+  const { categoriesMap, isLoading } = useShopCategories();
   const search = (searchParams.get('search') ?? '').toLowerCase().trim();
   const categoryFilter = searchParams.get('category') ?? 'all';
   const sort = searchParams.get('sort') ?? 'default';
@@ -36,7 +34,7 @@ const ShopContent = () => {
 
       if (search) {
         filteredProducts = filteredProducts.filter((product) =>
-          product.name.toLowerCase().includes(search)
+          product.name.toLowerCase().includes(search),
         );
       }
 

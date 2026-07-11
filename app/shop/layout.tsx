@@ -1,5 +1,5 @@
 import { getCategories } from '@/lib/categories';
-import ShopCategoriesHydrator from '@/providers/shop-categories-hydrator';
+import ShopCategoriesProvider from '@/providers/shop-categories-provider';
 import { Category } from '@/store/categories/category.types';
 
 export const revalidate = 3600;
@@ -14,9 +14,6 @@ export default async function ShopLayout({ children }: { children: React.ReactNo
   }
 
   return (
-    <>
-      <ShopCategoriesHydrator categories={categories} />
-      {children}
-    </>
+    <ShopCategoriesProvider initialCategories={categories}>{children}</ShopCategoriesProvider>
   );
 }
