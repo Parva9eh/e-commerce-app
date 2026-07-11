@@ -32,5 +32,9 @@ yarn-error.log*
 
 deno.lock
 
-# Local security checklist (not for public repo)
+# Local-only notes, reviews, and operator checklists (not for public repo)
+.local/
 SECURITY.md
+
+# Firebase CLI project binding (use scripts/deploy-firestore-rules.sh + .env instead)
+.firebaserc
