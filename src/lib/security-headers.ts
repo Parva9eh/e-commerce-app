@@ -60,7 +60,8 @@ export const applySecurityHeaders = (
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
-  response.headers.set('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  // No Cross-Origin-Opener-Policy: Google sign-in popups log window.close warnings under COOP,
+  // and this app does not use cross-origin isolation (COEP / SharedArrayBuffer).
   response.headers.set('Cross-Origin-Resource-Policy', 'same-site');
 
   const csp = buildContentSecurityPolicy(options.isProduction);
