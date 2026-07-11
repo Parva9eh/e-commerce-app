@@ -14,11 +14,15 @@ import {
   enforceRateLimit,
   rateLimitExceededResponse,
 } from '@/lib/rate-limit';
+import { hasAdminCredentials } from '@/lib/firebase-admin';
 import {
   assertOrderUserIdentity,
   resolveOrderEmail,
   verifyBearerToken,
 } from '@/lib/verify-auth';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 type SaveOrderBody = {
   paymentIntentId?: string;
@@ -37,9 +41,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
 
     if (!stripeSecretKey) {
+      console.error('[api:config] STRIPE_SECRET_KEY is missing');
+      return NextResponse.json(
+        { error: 'Payment service is not configured' },
+        { status: 500 },
+      );
+    }
+
+    if (!hasAdminCredentials()) {
+      console.error('[api:config] Firebase Admin credentials are missing');
       return NextResponse.json(
         { error: 'Payment service is not configured' },
         { status: 500 },

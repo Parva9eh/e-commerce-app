@@ -7,11 +7,15 @@ import {
   CART_FINGERPRINT_METADATA_KEY,
 } from '@/lib/cart-fingerprint';
 import { validateCartFromRequest } from '@/lib/catalog';
+import { hasAdminCredentials } from '@/lib/firebase-admin';
 import {
   applyRateLimitHeaders,
   enforceRateLimit,
   rateLimitExceededResponse,
 } from '@/lib/rate-limit';
+
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,24 +28,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
 
     if (!stripeSecretKey) {
+      console.error('[api:config] STRIPE_SECRET_KEY is missing');
       return NextResponse.json(
         { error: 'Payment service is not configured' },
         { status: 500 },
       );
     }
 
-    const body = await request.json();
-    const cartLines = parseCartLineInputs(body);
+    if (!hasAdminCredentials()) {
+      console.error('[api:config] Firebase Admin credentials are missing');
+      return NextResponse.json(
+        { error: 'Payment service is not configured' },
+        { status: 500 },
+      );
+    }
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
+
+    const cartLines = parseCartLineInputs(body as { items?: Array<{ id?: unknown; quantity?: unknown }> });
     const { totalCents, items } = await validateCartFromRequest(cartLines);
     const fingerprint = buildCartFingerprint(
       items.map(({ id, quantity }) => ({ id, quantity })),
     );
     const receiptEmail =
-      typeof body.receiptEmail === 'string' && body.receiptEmail.includes('@')
-        ? body.receiptEmail.trim()
+      typeof (body as { receiptEmail?: unknown }).receiptEmail === 'string' &&
+      (body as { receiptEmail: string }).receiptEmail.includes('@')
+        ? (body as { receiptEmail: string }).receiptEmail.trim()
         : undefined;
 
     const stripe = new Stripe(stripeSecretKey);
@@ -55,6 +75,14 @@ export async function POST(request: NextRequest) {
         item_count: String(items.length),
       },
     });
+
+    if (!paymentIntent.client_secret) {
+      console.error('[api] Stripe returned no client_secret');
+      return NextResponse.json(
+        { error: 'Payment initialization failed' },
+        { status: 502 },
+      );
+    }
 
     const response = NextResponse.json({ clientSecret: paymentIntent.client_secret });
     applyRateLimitHeaders(response, rateLimit);
