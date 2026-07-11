@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "demo:image": "node scripts/capture-demo-image.mjs",
-    "deploy:firestore-rules": "bash scripts/deploy-firestore-rules.sh"
+    "deploy:firestore-rules": "bash scripts/deploy-firestore-rules.sh",
+    "smoke:checkout": "node scripts/smoke-checkout.mjs"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^5.4.1",
