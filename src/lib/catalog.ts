@@ -1,7 +1,7 @@
 import { cache } from 'react';
+import { fetchPublicCategories } from '@/lib/catalog-fetch';
 import { MAX_CART_LINE_QTY, MIN_ORDER_CENTS } from '@/lib/cart-limits';
 import { Category, CategoryItem } from '@/store/categories/category.types';
-import { getCollectionAndDocuments } from '@/utils/firebase/firebase.utils';
 
 export type CartLineInput = {
   id: number;
@@ -50,7 +50,7 @@ const toPlainCategoryItems = (raw: Category[]): Category[] =>
  * so clients cannot set their own amounts.
  */
 const fetchCatalogCategories = async (): Promise<Category[]> => {
-  const categories = await getCollectionAndDocuments();
+  const categories = await fetchPublicCategories();
   return toPlainCategoryItems(categories);
 };
 

@@ -8,6 +8,7 @@ import {
 } from '@/lib/cart-fingerprint';
 import { validateCartFromRequest } from '@/lib/catalog';
 import { hasAdminCredentials } from '@/lib/firebase-admin-env';
+import { createOrderDocument } from '@/lib/firestore-rest';
 import {
   applyRateLimitHeaders,
   enforceRateLimit,
@@ -114,13 +115,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cart does not match payment' }, { status: 400 });
     }
 
-    // Lazy-load Admin only for the order write (keeps cold start lighter).
-    const { getAdminFirestore } = await import('@/lib/firebase-admin');
-    const { FieldValue } = await import('firebase-admin/firestore');
-
-    const db = getAdminFirestore();
-    const orderRef = db.collection('orders').doc(paymentIntentId);
-    const orderPayload = {
+    const result = await createOrderDocument(paymentIntentId, {
       userId: verifiedUser?.uid ?? null,
       userEmail: resolveOrderEmail(verifiedUser, paymentIntent.receipt_email),
       amount: totalDollars,
@@ -134,27 +129,12 @@ export async function POST(request: NextRequest) {
       })),
       paymentIntentId,
       cartFingerprint: fingerprint,
-      createdAt: FieldValue.serverTimestamp(),
-    };
+    });
 
-    try {
-      await orderRef.create(orderPayload);
-    } catch (error) {
-      const code =
-        error && typeof error === 'object' && 'code' in error
-          ? String((error as { code: unknown }).code)
-          : '';
-
-      if (code === '6' || code === 'already-exists' || /ALREADY_EXISTS/i.test(String(error))) {
-        const response = NextResponse.json({ success: true, duplicate: true });
-        applyRateLimitHeaders(response, rateLimit);
-        return response;
-      }
-
-      throw error;
-    }
-
-    const response = NextResponse.json({ success: true });
+    const response = NextResponse.json({
+      success: true,
+      ...(result.duplicate ? { duplicate: true } : {}),
+    });
     applyRateLimitHeaders(response, rateLimit);
     return response;
   } catch (error) {

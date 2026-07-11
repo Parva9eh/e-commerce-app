@@ -1,10 +1,12 @@
-import { getAdminAuth } from '@/lib/firebase-admin';
-
 export type VerifiedUser = {
   uid: string;
   email?: string;
 };
 
+/**
+ * Verify a Firebase ID token via Identity Toolkit REST (public API key).
+ * Does not load firebase-admin — safer on Vercel serverless.
+ */
 export const verifyBearerToken = async (
   authorizationHeader: string | null,
 ): Promise<VerifiedUser | null> => {
@@ -18,11 +20,39 @@ export const verifyBearerToken = async (
     return null;
   }
 
-  const decoded = await getAdminAuth().verifyIdToken(token);
+  const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('Firebase Admin credentials are not configured');
+  }
+
+  const response = await fetch(
+    `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ idToken: token }),
+      cache: 'no-store',
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error('Invalid authentication token');
+  }
+
+  const data = (await response.json()) as {
+    users?: Array<{ localId?: string; email?: string }>;
+  };
+
+  const user = data.users?.[0];
+
+  if (!user?.localId) {
+    throw new Error('Invalid authentication token');
+  }
 
   return {
-    uid: decoded.uid,
-    email: decoded.email,
+    uid: user.localId,
+    email: user.email,
   };
 };
 
