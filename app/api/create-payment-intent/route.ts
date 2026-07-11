@@ -7,7 +7,6 @@ import {
   CART_FINGERPRINT_METADATA_KEY,
 } from '@/lib/cart-fingerprint';
 import { validateCartFromRequest } from '@/lib/catalog';
-import { hasAdminCredentials } from '@/lib/firebase-admin';
 import {
   applyRateLimitHeaders,
   enforceRateLimit,
@@ -38,14 +37,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!hasAdminCredentials()) {
-      console.error('[api:config] Firebase Admin credentials are missing');
-      return NextResponse.json(
-        { error: 'Payment service is not configured' },
-        { status: 500 },
-      );
-    }
-
     let body: unknown;
     try {
       body = await request.json();
@@ -53,7 +44,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
-    const cartLines = parseCartLineInputs(body as { items?: Array<{ id?: unknown; quantity?: unknown }> });
+    const cartLines = parseCartLineInputs(
+      body as { items?: Array<{ id?: unknown; quantity?: unknown }> },
+    );
     const { totalCents, items } = await validateCartFromRequest(cartLines);
     const fingerprint = buildCartFingerprint(
       items.map(({ id, quantity }) => ({ id, quantity })),

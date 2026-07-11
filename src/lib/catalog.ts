@@ -1,7 +1,7 @@
 import { cache } from 'react';
-import { getAdminFirestore } from '@/lib/firebase-admin';
 import { MAX_CART_LINE_QTY, MIN_ORDER_CENTS } from '@/lib/cart-limits';
 import { Category, CategoryItem } from '@/store/categories/category.types';
+import { getCollectionAndDocuments } from '@/utils/firebase/firebase.utils';
 
 export type CartLineInput = {
   id: number;
@@ -43,9 +43,15 @@ const toPlainCategoryItems = (raw: Category[]): Category[] =>
     })),
   }));
 
+/**
+ * Public catalog read for server pricing.
+ * Uses the client Firebase SDK (NEXT_PUBLIC_* only) so payment routes do not
+ * load firebase-admin. Prices are public; we still recompute totals server-side
+ * so clients cannot set their own amounts.
+ */
 const fetchCatalogCategories = async (): Promise<Category[]> => {
-  const snapshot = await getAdminFirestore().collection('categories').get();
-  return toPlainCategoryItems(snapshot.docs.map((doc) => doc.data() as Category));
+  const categories = await getCollectionAndDocuments();
+  return toPlainCategoryItems(categories);
 };
 
 export const getCatalogCategories = async (): Promise<Category[]> => {

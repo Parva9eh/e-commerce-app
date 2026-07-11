@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { FieldValue } from 'firebase-admin/firestore';
 import { parseCartLineInputs } from '@/lib/api/cart-request';
 import { toApiErrorResponse } from '@/lib/api/http-errors';
 import {
@@ -8,13 +7,12 @@ import {
   CART_FINGERPRINT_METADATA_KEY,
 } from '@/lib/cart-fingerprint';
 import { validateCartFromRequest } from '@/lib/catalog';
-import { getAdminFirestore } from '@/lib/firebase-admin';
+import { hasAdminCredentials } from '@/lib/firebase-admin-env';
 import {
   applyRateLimitHeaders,
   enforceRateLimit,
   rateLimitExceededResponse,
 } from '@/lib/rate-limit';
-import { hasAdminCredentials } from '@/lib/firebase-admin';
 import {
   assertOrderUserIdentity,
   resolveOrderEmail,
@@ -59,7 +57,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = (await request.json()) as SaveOrderBody;
+    let body: SaveOrderBody;
+    try {
+      body = (await request.json()) as SaveOrderBody;
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    }
+
     const paymentIntentId = body.paymentIntentId;
 
     if (!paymentIntentId || typeof paymentIntentId !== 'string') {
@@ -110,6 +114,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Cart does not match payment' }, { status: 400 });
     }
 
+    // Lazy-load Admin only for the order write (keeps cold start lighter).
+    const { getAdminFirestore } = await import('@/lib/firebase-admin');
+    const { FieldValue } = await import('firebase-admin/firestore');
+
     const db = getAdminFirestore();
     const orderRef = db.collection('orders').doc(paymentIntentId);
     const orderPayload = {
@@ -137,7 +145,6 @@ export async function POST(request: NextRequest) {
           ? String((error as { code: unknown }).code)
           : '';
 
-      // Idempotent replay: same paymentIntentId already saved.
       if (code === '6' || code === 'already-exists' || /ALREADY_EXISTS/i.test(String(error))) {
         const response = NextResponse.json({ success: true, duplicate: true });
         applyRateLimitHeaders(response, rateLimit);

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { normalizePrivateKey } from '@/lib/firebase-admin';
+import { normalizePrivateKey } from '@/lib/firebase-admin-env';
 
 describe('normalizePrivateKey', () => {
   test('converts escaped newlines and strips wrapping quotes', () => {
