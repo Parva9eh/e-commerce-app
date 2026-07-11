@@ -2,15 +2,26 @@ import { notFound } from 'next/navigation';
 import ProductDetail from '@/routes/product/product-detail.component';
 import { createPageMetadata } from '@/lib/metadata';
 import { getCategories } from '@/lib/categories';
+import { Category } from '@/store/categories/category.types';
 
 type ProductPageProps = {
   params: Promise<{ category: string; productId: string }>;
 };
 
+const loadCategories = async (): Promise<Category[]> => {
+  try {
+    return await getCategories();
+  } catch {
+    return [];
+  }
+};
+
 export async function generateMetadata({ params }: ProductPageProps) {
   const { category, productId } = await params;
-  const categories = await getCategories();
-  const products = categories.find((item) => item.title.toLowerCase() === category.toLowerCase())?.items ?? [];
+  const categories = await loadCategories();
+  const products =
+    categories.find((item) => item.title.toLowerCase() === category.toLowerCase())?.items ??
+    [];
   const product = products.find((item) => item.id === Number(productId));
 
   if (!product) {
@@ -30,8 +41,10 @@ export async function generateMetadata({ params }: ProductPageProps) {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { category, productId } = await params;
-  const categories = await getCategories();
-  const products = categories.find((item) => item.title.toLowerCase() === category.toLowerCase())?.items ?? [];
+  const categories = await loadCategories();
+  const products =
+    categories.find((item) => item.title.toLowerCase() === category.toLowerCase())?.items ??
+    [];
   const product = products.find((item) => item.id === Number(productId));
 
   if (!product) {

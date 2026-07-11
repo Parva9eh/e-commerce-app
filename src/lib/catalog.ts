@@ -31,9 +31,21 @@ export const clearCatalogCache = (): void => {
   catalogCache = null;
 };
 
+const toPlainCategoryItems = (raw: Category[]): Category[] =>
+  raw.map((category) => ({
+    title: String(category?.title ?? ''),
+    imagUrl: String(category?.imagUrl ?? ''),
+    items: (category?.items ?? []).map((item) => ({
+      id: Number(item.id),
+      name: String(item.name ?? ''),
+      price: Number(item.price),
+      imageUrl: String(item.imageUrl ?? ''),
+    })),
+  }));
+
 const fetchCatalogCategories = async (): Promise<Category[]> => {
   const snapshot = await getAdminFirestore().collection('categories').get();
-  return snapshot.docs.map((doc) => doc.data() as Category);
+  return toPlainCategoryItems(snapshot.docs.map((doc) => doc.data() as Category));
 };
 
 export const getCatalogCategories = async (): Promise<Category[]> => {
