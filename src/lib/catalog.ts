@@ -1,4 +1,6 @@
+import { cache } from 'react';
 import { getAdminFirestore } from '@/lib/firebase-admin';
+import { MAX_CART_LINE_QTY, MIN_ORDER_CENTS } from '@/lib/cart-limits';
 import { Category, CategoryItem } from '@/store/categories/category.types';
 
 export type CartLineInput = {
@@ -16,11 +18,44 @@ export type ValidatedCart = {
   totalDollars: number;
 };
 
-export const getCatalogCategories = async (): Promise<Category[]> => {
-  const snapshot = await getAdminFirestore().collection('categories').get();
+const CATALOG_CACHE_TTL_MS = 5 * 60 * 1000;
 
+type CatalogCacheEntry = {
+  categories: Category[];
+  expiresAt: number;
+};
+
+let catalogCache: CatalogCacheEntry | null = null;
+
+export const clearCatalogCache = (): void => {
+  catalogCache = null;
+};
+
+const fetchCatalogCategories = async (): Promise<Category[]> => {
+  const snapshot = await getAdminFirestore().collection('categories').get();
   return snapshot.docs.map((doc) => doc.data() as Category);
 };
+
+export const getCatalogCategories = async (): Promise<Category[]> => {
+  const now = Date.now();
+
+  if (catalogCache && now < catalogCache.expiresAt) {
+    return catalogCache.categories;
+  }
+
+  const categories = await fetchCatalogCategories();
+  catalogCache = {
+    categories,
+    expiresAt: now + CATALOG_CACHE_TTL_MS,
+  };
+
+  return categories;
+};
+
+/** Request-scoped + TTL-backed catalog for Server Components and route handlers. */
+export const getCachedCatalogCategories = cache(async (): Promise<Category[]> => {
+  return getCatalogCategories();
+});
 
 export const buildCatalogIndex = (categories: Category[]): Map<number, CategoryItem> => {
   const index = new Map<number, CategoryItem>();
@@ -34,6 +69,19 @@ export const buildCatalogIndex = (categories: Category[]): Map<number, CategoryI
   return index;
 };
 
+/** Merge duplicate product ids so quantity is summed before validation. */
+export const mergeCartLineInputs = (lines: CartLineInput[]): CartLineInput[] => {
+  const merged = new Map<number, number>();
+
+  for (const line of lines) {
+    const id = Number(line.id);
+    const quantity = Number(line.quantity);
+    merged.set(id, (merged.get(id) ?? 0) + quantity);
+  }
+
+  return Array.from(merged.entries()).map(([id, quantity]) => ({ id, quantity }));
+};
+
 export const validateAndPriceCartLines = (
   lines: CartLineInput[],
   catalog: Map<number, CategoryItem>,
@@ -42,10 +90,11 @@ export const validateAndPriceCartLines = (
     throw new Error('Cart is empty');
   }
 
+  const mergedLines = mergeCartLineInputs(lines);
   const items: ValidatedCartLine[] = [];
   let totalCents = 0;
 
-  for (const line of lines) {
+  for (const line of mergedLines) {
     const id = Number(line.id);
     const quantity = Number(line.quantity);
 
@@ -53,7 +102,7 @@ export const validateAndPriceCartLines = (
       !Number.isInteger(id) ||
       !Number.isInteger(quantity) ||
       quantity < 1 ||
-      quantity > 99
+      quantity > MAX_CART_LINE_QTY
     ) {
       throw new Error('Invalid cart line');
     }
@@ -76,7 +125,7 @@ export const validateAndPriceCartLines = (
     });
   }
 
-  if (totalCents < 50) {
+  if (totalCents < MIN_ORDER_CENTS) {
     throw new Error('Order total is below the minimum charge');
   }
 

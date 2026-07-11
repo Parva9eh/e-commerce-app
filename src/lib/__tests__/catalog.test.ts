@@ -1,8 +1,10 @@
 import { describe, expect, test } from 'vitest';
 import {
   buildCatalogIndex,
+  mergeCartLineInputs,
   validateAndPriceCartLines,
 } from '@/lib/catalog';
+import { MAX_CART_LINE_QTY } from '@/lib/cart-limits';
 import { Category } from '@/store/categories/category.types';
 
 const mockCategories: Category[] = [
@@ -22,6 +24,19 @@ describe('catalog validation', () => {
 
     expect(index.get(1)?.name).toBe('Brown Hat');
     expect(index.get(2)?.price).toBe(18.5);
+  });
+
+  test('mergeCartLineInputs sums quantities for the same product id', () => {
+    expect(
+      mergeCartLineInputs([
+        { id: 1, quantity: 2 },
+        { id: 1, quantity: 3 },
+        { id: 2, quantity: 1 },
+      ]),
+    ).toEqual([
+      { id: 1, quantity: 5 },
+      { id: 2, quantity: 1 },
+    ]);
   });
 
   test('validateAndPriceCartLines computes totals from catalog prices', () => {
@@ -52,6 +67,15 @@ describe('catalog validation', () => {
     expect(() =>
       validateAndPriceCartLines(
         [{ id: 1, quantity: 0 }],
+        buildCatalogIndex(mockCategories),
+      ),
+    ).toThrow('Invalid cart line');
+  });
+
+  test('validateAndPriceCartLines rejects quantities above the shared max', () => {
+    expect(() =>
+      validateAndPriceCartLines(
+        [{ id: 1, quantity: MAX_CART_LINE_QTY + 1 }],
         buildCatalogIndex(mockCategories),
       ),
     ).toThrow('Invalid cart line');

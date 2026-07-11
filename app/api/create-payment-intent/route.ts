@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { parseCartLineInputs } from '@/lib/api/cart-request';
+import { toApiErrorResponse } from '@/lib/api/http-errors';
+import {
+  buildCartFingerprint,
+  CART_FINGERPRINT_METADATA_KEY,
+} from '@/lib/cart-fingerprint';
 import { validateCartFromRequest } from '@/lib/catalog';
 import {
   applyRateLimitHeaders,
@@ -10,7 +15,7 @@ import {
 
 export async function POST(request: NextRequest) {
   try {
-    const rateLimit = enforceRateLimit(request, 'create-payment-intent', 10, 60_000);
+    const rateLimit = await enforceRateLimit(request, 'create-payment-intent', 10, 60_000);
 
     if (!rateLimit.ok) {
       return rateLimitExceededResponse(
@@ -23,28 +28,38 @@ export async function POST(request: NextRequest) {
 
     if (!stripeSecretKey) {
       return NextResponse.json(
-        { error: 'Stripe secret key is not configured' },
+        { error: 'Payment service is not configured' },
         { status: 500 },
       );
     }
 
     const body = await request.json();
     const cartLines = parseCartLineInputs(body);
-    const { totalCents } = await validateCartFromRequest(cartLines);
+    const { totalCents, items } = await validateCartFromRequest(cartLines);
+    const fingerprint = buildCartFingerprint(
+      items.map(({ id, quantity }) => ({ id, quantity })),
+    );
+    const receiptEmail =
+      typeof body.receiptEmail === 'string' && body.receiptEmail.includes('@')
+        ? body.receiptEmail.trim()
+        : undefined;
 
     const stripe = new Stripe(stripeSecretKey);
     const paymentIntent = await stripe.paymentIntents.create({
       amount: totalCents,
       currency: 'usd',
       payment_method_types: ['card'],
+      ...(receiptEmail ? { receipt_email: receiptEmail } : {}),
+      metadata: {
+        [CART_FINGERPRINT_METADATA_KEY]: fingerprint,
+        item_count: String(items.length),
+      },
     });
 
     const response = NextResponse.json({ clientSecret: paymentIntent.client_secret });
     applyRateLimitHeaders(response, rateLimit);
     return response;
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Payment initialization failed';
-
-    return NextResponse.json({ error: message }, { status: 400 });
+    return toApiErrorResponse(error, 'Payment initialization failed');
   }
 }

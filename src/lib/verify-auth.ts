@@ -26,10 +26,13 @@ export const verifyBearerToken = async (
   };
 };
 
+/**
+ * Ensures a signed-in order claim matches the verified Firebase token.
+ * Guests (no userId) skip identity checks; order email is never taken from the client.
+ */
 export const assertOrderUserIdentity = (
   verifiedUser: VerifiedUser | null,
   userId: string | null | undefined,
-  userEmail: string | null | undefined,
 ): string | null => {
   if (!userId) {
     return null;
@@ -39,12 +42,20 @@ export const assertOrderUserIdentity = (
     return 'Unauthorized order user';
   }
 
-  if (
-    userEmail &&
-    verifiedUser.email &&
-    userEmail.toLowerCase() !== verifiedUser.email.toLowerCase()
-  ) {
-    return 'Order email does not match signed-in user';
+  return null;
+};
+
+/** Prefer verified auth email, then Stripe PaymentIntent receipt email — never trust body email. */
+export const resolveOrderEmail = (
+  verifiedUser: VerifiedUser | null,
+  paymentIntentReceiptEmail: string | null | undefined,
+): string | null => {
+  if (verifiedUser?.email) {
+    return verifiedUser.email;
+  }
+
+  if (paymentIntentReceiptEmail?.trim()) {
+    return paymentIntentReceiptEmail.trim();
   }
 
   return null;
