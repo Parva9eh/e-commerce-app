@@ -122,11 +122,15 @@ const PaymentForm = () => {
 
         if (currentUser) {
           const firebaseUtils = await getFirebaseUtils();
-          const idToken = await firebaseUtils.getCurrentUserIdToken();
+          // Fresh token avoids rare expiry races after card confirmation.
+          const idToken = await firebaseUtils.getCurrentUserIdToken(true);
 
-          if (idToken) {
-            saveHeaders.Authorization = `Bearer ${idToken}`;
+          if (!idToken) {
+            showError('Your session expired. Please sign in again, then retry checkout.');
+            return;
           }
+
+          saveHeaders.Authorization = `Bearer ${idToken}`;
         }
 
         const saveResponse = await fetch('/api/save-order', {
@@ -134,7 +138,8 @@ const PaymentForm = () => {
           headers: saveHeaders,
           body: JSON.stringify({
             paymentIntentId,
-            userId: currentUser?.id ?? null,
+            // Only claim a user id when we also send a bearer token.
+            userId: currentUser && saveHeaders.Authorization ? currentUser.id : null,
             items: cartPayload,
           }),
         });
