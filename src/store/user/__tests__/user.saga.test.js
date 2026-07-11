@@ -264,7 +264,7 @@ describe('user sagas', () => {
             .run();
     });
 
-    test('getSnapshotFromUserAuth saga error path should fall back to Firebase auth profile', () => {
+    test('getSnapshotFromUserAuth saga error path should put signInFailed', () => {
         const mockUserAuth = {
             uid: 'user-1',
             displayName: 'Jane Doe',
@@ -284,18 +284,8 @@ describe('user sagas', () => {
               throwError(mockError),
             ],
           ]))
-          .run()
-          .then(({ allEffects }) => {
-            const putEffect = allEffects.find((effect) => effect.type === 'PUT');
-
-            expect(putEffect.payload.action.type).toBe(USER_ACTION_TYPES.SIGN_IN_SUCCESS);
-            expect(putEffect.payload.action.payload).toMatchObject({
-              id: 'user-1',
-              displayName: 'test',
-              email: 'jane@example.com',
-            });
-            expect(putEffect.payload.action.payload.createdAt).toBeInstanceOf(Date);
-          });
+          .put(signInFailed(mockError))
+          .run();
     });
 
 });
