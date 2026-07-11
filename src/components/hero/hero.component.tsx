@@ -2,10 +2,8 @@
 
 import Image from 'next/image';
 import { LCP_IMAGE_SRC } from '@/lib/marketing-images';
-import { rememberHomeBrowseOrigin } from '@/utils/shop/browse-origin';
+import BrowseOriginLink from '@/components/browse-origin-link/browse-origin-link.component';
 import { HERO_CATEGORIES, HERO_FEATURES, HERO_IMAGES } from './hero.constants';
-
-const isLcpImage = (src: string) => src === LCP_IMAGE_SRC;
 import {
   HeroActions,
   HeroCategoryLink,
@@ -25,6 +23,9 @@ import {
   HeroVisual,
 } from './hero.styles';
 
+const isLcpImage = (src: string) => src === LCP_IMAGE_SRC;
+
+
 const Hero = () => (
   <HeroContainer aria-labelledby="hero-title">
     <HeroGrid>
@@ -36,14 +37,8 @@ const Hero = () => (
           sneakers, and apparel crafted with clean lines and lasting quality.
         </HeroSubtitle>
         <HeroActions>
-          <HeroCta href="/shop">
-            Shop Collection
-          </HeroCta>
-          <HeroCta
-            href="/shop/sneakers"
-            $variant="secondary"
-            onClick={rememberHomeBrowseOrigin}
-          >
+          <HeroCta href="/shop">Shop Collection</HeroCta>
+          <HeroCta as={BrowseOriginLink} href="/shop/sneakers" $variant="secondary">
             Explore Sneakers
           </HeroCta>
         </HeroActions>
@@ -97,7 +92,7 @@ const Hero = () => (
 
     <HeroCategoryNav aria-label="Shop by category">
       {HERO_CATEGORIES.map(({ label, href }) => (
-        <HeroCategoryLink key={href} href={href} onClick={rememberHomeBrowseOrigin}>
+        <HeroCategoryLink as={BrowseOriginLink} key={href} href={href}>
           {label}
         </HeroCategoryLink>
       ))}
